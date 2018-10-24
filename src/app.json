@@ -1,6 +1,6 @@
 {
   "cloud": true,
-  "pages": ["pages/index/main"],
+  "pages": ["pages/category/main", "pages/select/main", "pages/index/main"],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
