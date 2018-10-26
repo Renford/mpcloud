@@ -34,12 +34,13 @@ class Cloud {
       ops = {}
     }
 
+    console.log('--------get', params)
+
     const db = wx.cloud.database()
     return db
       .collection(url)
       .where({
         ...ops
-        // type: _.eq('camping')
       })
       .get()
       .then(res => {

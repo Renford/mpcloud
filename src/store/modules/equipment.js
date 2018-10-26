@@ -1,35 +1,25 @@
 import api from '@/api/api'
 
 const state = {
-  equips: [],
-  clothes: []
+  categories: []
 }
 
 const mutations = {
-  setEquips: (state, cates) => {
-    state.equips = cates
+  setCategories: (state, cates) => {
+    state.categories = cates
   }
 }
 
 const actions = {
   getEquips({ commit, state }, type) {
+    const _ = wx.cloud.database().command
+    const equipType = _.eq(type)
+      .or(_.eq('running'))
+      .or(_.eq('swimming'))
     return api.travel
-      .getEquips(type)
+      .getEquips(equipType)
       .then(res => {
-        console.log('getEquips ===', res)
-        commit('setEquips', res)
-      })
-      .catch(err => {
-        console.log('===errr:', err)
-      })
-  },
-
-  getClothes({ commit, state }) {
-    return api.travel
-      .getEquips('clothes')
-      .then(res => {
-        console.log('getEquips ===', res)
-        commit('setEquips', res)
+        commit('setCategories', res)
       })
       .catch(err => {
         console.log('===errr:', err)
