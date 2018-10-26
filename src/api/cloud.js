@@ -39,6 +39,7 @@ class Cloud {
       .collection(url)
       .where({
         ...ops
+        // type: _.eq('camping')
       })
       .get()
       .then(res => {

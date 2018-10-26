@@ -21,6 +21,9 @@
 <script>
 import api from '@/api/api'
 
+import store from '@/store'
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
   data() {
     return {
@@ -28,9 +31,15 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState('equipment', ['equips'])
+  },
+
   components: {},
 
   methods: {
+    ...mapActions('equipment', ['getEquips']),
+
     onFormSubmit(info) {
       console.log('===onFormSubmit', info)
     },
@@ -41,6 +50,14 @@ export default {
   },
 
   mounted() {
+    this.getEquips('camping')
+      .then(res => {
+        console.log('res====', res)
+      })
+      .catch(err => {
+        console.log('err====', err)
+      })
+
     // datas.forEach(item => {
     //   api.travel
     //     .addEquip(item)
