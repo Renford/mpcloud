@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "选择分类(1/3)",
   "usingComponents": {
     "wux-icon": "/static/wux/icon/index",
     "wux-grids": "/static/wux/grids/index",

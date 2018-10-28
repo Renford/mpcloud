@@ -1,8 +1,8 @@
 <template>
   <div>
-    <wux-checkbox-group :name="equipment.cateId" :value="selectIndexs" :title="equipment.cateName" @change="onChange">
-      <div v-for="(equip, equipIndex) in equipment.equips" :key="equipIndex">
-        <wux-checkbox color="balanced" :title="equip" :value="equipIndex"/>
+    <wux-checkbox-group :name="cate.cateName" :value="selectIndexs" :title="cate.cateName" @change="onChange">
+      <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
+        <wux-checkbox color="balanced" :title="equip.name" :label="equip.typeName" :value="equipIndex"/>
       </div>
     </wux-checkbox-group>
   </div>
@@ -11,7 +11,7 @@
 <script>
 export default {
   props: {
-    equipment: {
+    cate: {
       type: Object,
       default: {}
     }
@@ -33,7 +33,9 @@ export default {
         this.selectIndexs = array.filter(n => n !== index)
       }
     }
-  }
+  },
+
+  mounted() {}
 }
 </script>
 

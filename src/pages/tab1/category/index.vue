@@ -1,9 +1,8 @@
 <template>
   <div>  
-    <!-- <wux-button block type="balanced" open-type="getUserInfo" @getuserinfo="onGetUserInfo">userInfo</wux-button> -->
     <wux-grids>
       <div v-for="(item, index) in categories" :key="index">
-        <wux-grid :thumb="item.icon" :label="item.name" @click="onItemTapEvent(item)"/>
+        <wux-grid :thumb="item.iconUrl" :label="item.cateName" @click="onItemTapEvent(item)"/>
       </div>
     </wux-grids>
   </div>
@@ -29,14 +28,13 @@ export default {
   methods: {
     ...mapActions('category', ['getCategories']),
 
-    onGetUserInfo(info) {
-      console.log('===onGetUserInfo', info)
-    },
-
     onItemTapEvent(item) {
-      console.log('=====onItemTapEvent', item)
       this.$router.push({
-        path: '/pages/select/main'
+        path: '/pages/tab1/select/main',
+        query: {
+          cateId: item.cateId,
+          cateName: item.cateName
+        }
       })
     }
   },

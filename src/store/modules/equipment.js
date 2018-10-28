@@ -11,13 +11,12 @@ const mutations = {
 }
 
 const actions = {
-  getEquips({ commit, state }, type) {
+  getCategories({ commit, state }, id) {
+    const cateIds = [id, 'yiwu', 'dianzi', 'xishu']
     const _ = wx.cloud.database().command
-    const equipType = _.eq(type)
-      .or(_.eq('running'))
-      .or(_.eq('swimming'))
+    const ids = _.in(cateIds)
     return api.travel
-      .getEquips(equipType)
+      .getCategories(ids)
       .then(res => {
         commit('setCategories', res)
       })

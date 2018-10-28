@@ -1,34 +1,21 @@
 {
   "cloud": true,
   "pages": [
-    "pages/select/main",
-
-    "pages/category/main",
-    "pages/mine/main",
-    "pages/index/main"
+    "pages/tab1/home/main",
+    "pages/tab1/category/main",
+    "pages/tab1/select/main",
+    "pages/tab1/commit/main",
+    "pages/tab1/pack/main",
+    "pages/tab2/mine/main",
+    "pages/tab2/equips/main",
+    "pages/tab2/equipadd/main",
+    "pages/tab2/plans/main",
+    "pages/tab2/index/main"
   ],
-  "tabBar": {
-    "color": "#8A8A8A",
-    "selectedColor": "#33CD5F",
-    "list": [
-      {
-        "pagePath": "pages/category/main",
-        "text": "首页",
-        "iconPath": "static/tab1_nor.png",
-        "selectedIconPath": "static/tab1_sel.png"
-      },
-      {
-        "pagePath": "pages/mine/main",
-        "text": "我的",
-        "iconPath": "static/tab2_nor.png",
-        "selectedIconPath": "static/tab2_sel.png"
-      }
-    ]
-  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "旅中人",
     "navigationBarTextStyle": "black"
   }
 }

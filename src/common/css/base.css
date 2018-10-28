@@ -22,3 +22,11 @@
   font-size: 16px;
   border: 0;
 }
+
+.nodata-container {
+  height: 600rpx;
+}
+
+.bottom-button-container {
+  padding: 40rpx;
+}

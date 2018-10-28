@@ -1,6 +1,10 @@
 <script>
+import appUtils from '@/common/utils/AppUtils'
+
 export default {
-  created() {},
+  created() {
+    appUtils.loadStorage()
+  },
 
   onLaunch() {
     if (!wx.cloud) {
@@ -10,6 +14,8 @@ export default {
         traceUser: true
       })
     }
+
+    appUtils.getOpenId()
   }
 }
 </script>

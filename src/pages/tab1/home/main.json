@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "旅中人",
+  "navigationBarBackgroundColor": "#ffeeee",
+  "usingComponents": {
+    "wux-button": "/static/wux/button/index",
+    "wux-image": "/static/wux/image/index",
+    "wux-prompt": "/static/wux/prompt/index",
+    "wux-divider": "/static/wux/divider/index",
+    "wux-cell": "/static/wux/cell/index",
+    "wux-cell-group": "/static/wux/cell-group/index"
+  }
+}

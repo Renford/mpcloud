@@ -18,6 +18,7 @@ class Cloud {
       .remove()
   }
 
+  // 更新记录的某个属性
   update(url, docid, params) {
     return wx.cloud
       .database()
@@ -28,13 +29,30 @@ class Cloud {
       })
   }
 
+  // 更新整条记录
+  set(url, docid, params) {
+    return wx.cloud
+      .database()
+      .collection(url)
+      .doc(docid)
+      .set({
+        data: params
+      })
+  }
+
   get(url, params) {
     let ops = params
     if (params === undefined) {
       ops = {}
     }
 
-    console.log('--------get', params)
+    let count = 10
+    if (ops.count !== undefined) {
+      count = ops.count
+      delete ops.count
+    }
+
+    console.log('===ops====', ops, count)
 
     const db = wx.cloud.database()
     return db
@@ -42,6 +60,7 @@ class Cloud {
       .where({
         ...ops
       })
+      .limit(count)
       .get()
       .then(res => {
         if (res.errMsg === 'collection.get:ok') {

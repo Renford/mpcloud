@@ -2,14 +2,10 @@ import api from '@/api/api'
 
 const OpenIdKey = 'OpenIdKey'
 const UserInfoKey = 'UserInfoKey'
-const OfficeInfoKey = 'OfficeInfoKey'
-const SourceUserIdKey = 'SourceUserIdKey'
 
 class AppUtils {
   openId = ''
   userInfo = {}
-  officeInfo = {}
-  sourceUserId = ''
 
   saveOpenId(openId) {
     this.openId = openId
@@ -27,26 +23,6 @@ class AppUtils {
     })
   }
 
-  saveOffcieInfo(officeInfo) {
-    this.officeInfo = officeInfo
-    wx.setStorage({
-      key: OfficeInfoKey,
-      data: officeInfo
-    })
-  }
-
-  saveSourceUserId(userId) {
-    this.sourceUserId = userId
-    wx.setStorage({
-      key: SourceUserIdKey,
-      data: userId
-    })
-  }
-
-  clearSourceUserId() {
-    this.sourceUserId = ''
-  }
-
   loadStorage() {
     const that = this
     wx.getStorage({
@@ -62,92 +38,83 @@ class AppUtils {
         that.userInfo = res.data
       }
     })
-
-    wx.getStorage({
-      key: OfficeInfoKey,
-      success: function(res) {
-        that.officeInfo = res.data
-      }
-    })
-
-    wx.getStorage({
-      key: SourceUserIdKey,
-      success: function(res) {
-        that.sourceUserId = res.data
-      }
-    })
   }
 
-  launchApp(that) {
-    if (this.openId.length === 0) {
-      this.wxLogin(that)
-      this.getOfficeInfo()
-    } else {
-    }
-  }
-
-  wxLogin(that) {
-    let tempThis = this
-    wx.login({
-      success: function(res) {
-        let code = res.code
-        tempThis
-          .getOpenId(code)
-          .then(() => {
-            tempThis
-              .getUserInfo()
-              .then(res => {})
-              .catch(err => {
-                console.log('用户信息获取失败，进入注册页面\n', err)
-                that.$router.push({
-                  path: '/pages/tab3/register/main',
-                  reLaunch: true
-                })
-              })
-          })
-          .catch(err => {
-            console.log('===getOpenid error:', err)
-          })
-      },
-      fail: function(err) {
-        console.log('===wx login error:', err)
-      }
-    })
-  }
-
-  getOpenId(code) {
-    let tempThis = this
-    return api.mine.getOpenId(code).then(res => {
-      tempThis.openId = res.openid
-    })
-  }
-
-  getUserInfo() {
-    let tempThis = this
-    return api.mine.getUserInfo(this.openId).then(res => {
-      tempThis.userInfo = res[0]
-      tempThis.saveOpenId(tempThis.openId)
-      tempThis.saveUserInfo(tempThis.userInfo)
-    })
-  }
-
-  getOfficeInfo() {
-    let tempThis = this
-    return api.mine
-      .getOfficeInfo()
+  getOpenId() {
+    const that = this
+    return wx.cloud
+      .callFunction({
+        name: 'login',
+        data: {}
+      })
       .then(res => {
-        tempThis.officeInfo = res[0]
-        tempThis.saveOffcieInfo(tempThis.officeInfo)
+        console.log('===get openid success: ', res)
+        if (res.errMsg === 'cloud.callFunction:ok') {
+          that.saveOpenId(res.result.openid)
+        }
       })
       .catch(err => {
-        console.log('===get office info eror:', err)
+        console.log('===get openid error: ', err)
       })
   }
 
+  // launchApp(that) {
+  //   if (this.openId.length === 0) {
+  //     this.wxLogin(that)
+  //     this.getOfficeInfo()
+  //   } else {
+  //   }
+  // }
+
+  // wxLogin(that) {
+  //   let tempThis = this
+  //   wx.login({
+  //     success: function(res) {
+  //       let code = res.code
+  //       tempThis
+  //         .getOpenId(code)
+  //         .then(() => {
+  //           tempThis
+  //             .getUserInfo()
+  //             .then(res => {})
+  //             .catch(err => {
+  //               console.log('用户信息获取失败，进入注册页面\n', err)
+  //               that.$router.push({
+  //                 path: '/pages/tab3/register/main',
+  //                 reLaunch: true
+  //               })
+  //             })
+  //         })
+  //         .catch(err => {
+  //           console.log('===getOpenid error:', err)
+  //         })
+  //     },
+  //     fail: function(err) {
+  //       console.log('===wx login error:', err)
+  //     }
+  //   })
+  // }
+
+  // getOpenId(code) {
+  //   let tempThis = this
+  //   return api.mine.getOpenId(code).then(res => {
+  //     tempThis.openId = res.openid
+  //   })
+  // }
+
+  // getUserInfo() {
+  //   let tempThis = this
+  //   return api.mine.getUserInfo(this.openId).then(res => {
+  //     tempThis.userInfo = res[0]
+  //     tempThis.saveOpenId(tempThis.openId)
+  //     tempThis.saveUserInfo(tempThis.userInfo)
+  //   })
+  // }
+
   getShareObject() {
-    const path = `/pages/tab3/mine/main?userId=${this.userInfo.id}`
+    const path = `/pages/tab1/home/main`
     return {
-      title: '我的',
+      title: '旅中人',
       path: path,
       imageUrl: '/static/icon',
       success: res => {
