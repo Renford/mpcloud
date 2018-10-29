@@ -1,6 +1,5 @@
 {
   "navigationBarTitleText": "旅中人",
-  "navigationBarBackgroundColor": "#ffeeee",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
     "wux-image": "/static/wux/image/index",

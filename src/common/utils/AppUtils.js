@@ -6,6 +6,7 @@ const UserInfoKey = 'UserInfoKey'
 class AppUtils {
   openId = ''
   userInfo = {}
+  bottomHeight = 96
 
   saveOpenId(openId) {
     this.openId = openId
@@ -40,6 +41,19 @@ class AppUtils {
     })
   }
 
+  getSystemInfo() {
+    const that = this
+    wx.getSystemInfo({
+      success: function(res) {
+        that.bottomHeight = res.screenHeight - res.windowHeight
+        console.log('=====system info:', res)
+      },
+      fail: function(err) {
+        console.log('=====system info', err)
+      }
+    })
+  }
+
   getOpenId() {
     const that = this
     return wx.cloud
@@ -48,13 +62,13 @@ class AppUtils {
         data: {}
       })
       .then(res => {
-        console.log('===get openid success: ', res)
+        console.log('=====get openid: ', res)
         if (res.errMsg === 'cloud.callFunction:ok') {
           that.saveOpenId(res.result.openid)
         }
       })
       .catch(err => {
-        console.log('===get openid error: ', err)
+        console.log('===get openid: ', err)
       })
   }
 

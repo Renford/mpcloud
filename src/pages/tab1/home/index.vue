@@ -15,7 +15,7 @@
 
     <div v-else>
 
-      <div class="header-container B6">
+      <div class="header-container">
         <home-header :plan="plan"></home-header>
       </div>
 
@@ -39,12 +39,14 @@
         </div>
       </div>
 
-      <div class="bottom-container">
-        <wux-button block type="balanced" @click="onShowPackPage">{{nextBtnTitle}}</wux-button>
+      <div class="bottom-container" :style="{height: bottomHeight+'px'}">
+        <button class="bottom-button" plain @click="onShowPackPage">{{nextBtnTitle}}</button>
       </div>
 
       <div class="user-container">
-        <wux-image :src="headUrl" shape="circle" width=100rpx height=100rpx></wux-image>
+        <wux-image :src="headUrl" shape="circle" width=100rpx height=100rpx>
+          <image src="/static/icon_user.png" slot="loading" />
+        </wux-image>
         <button class="user-button" open-type="getUserInfo" @getuserinfo="onGetUserInfo"></button>
       </div>
     </div>
@@ -71,7 +73,13 @@ export default {
   },
 
   computed: {
-    ...mapState('home', ['plan'])
+    ...mapState('home', ['plan']),
+
+    bottomHeight: {
+      get: function() {
+        return appUtils.bottomHeight
+      }
+    }
   },
 
   components: {
@@ -116,6 +124,13 @@ export default {
 
     onItemEvent(equip) {
       console.log('equips=====', equip)
+      const equipStr = JSON.stringify(equip)
+      this.$router.push({
+        path: '/pages/tab2/equipedit/main',
+        query: {
+          equip: equip
+        }
+      })
     }
   },
 
@@ -139,6 +154,7 @@ function getPlans(that) {
   that
     .getPlans()
     .then(res => {
+      wx.setNavigationBarTitle({ title: that.plan.title })
       updateViewStatus(that)
     })
     .catch(err => {
@@ -160,7 +176,7 @@ function updateViewStatus(that) {
 
 <style scoped>
 .home-container {
-  padding: 160rpx 0 0 0;
+  padding: 160rpx 0 180rpx 0;
 }
 
 .header-container {
@@ -169,6 +185,7 @@ function updateViewStatus(that) {
   top: 0;
   width: 100%;
   height: 160rpx;
+  background-color: #282a34;
 }
 
 .bottom-container {
@@ -177,8 +194,14 @@ function updateViewStatus(that) {
   left: 0;
   right: 0;
   bottom: 0;
-  /* height: 110rpx; */
-  /* padding: 40rpx; */
+  background-color: #282a34;
+}
+
+.bottom-button {
+  width: 100%;
+  height: 96rpx;
+  color: white;
+  border: 0;
 }
 
 .user-container {

@@ -13,9 +13,9 @@
     "pages/tab2/index/main"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#282a34",
     "navigationBarTitleText": "旅中人",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   }
 }

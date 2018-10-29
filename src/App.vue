@@ -4,6 +4,7 @@ import appUtils from '@/common/utils/AppUtils'
 export default {
   created() {
     appUtils.loadStorage()
+    appUtils.getSystemInfo()
   },
 
   onLaunch() {
@@ -26,6 +27,6 @@ export default {
 @import url('./common/css/base.css');
 
 page {
-  background-color: #f8f8f8;
+  background-color: #f2f3f4;
 }
 </style>

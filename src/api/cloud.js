@@ -78,7 +78,7 @@ class Cloud {
         data: params
       })
       .then(res => {
-        console.log('res================', res)
+        console.log('=====call faction', res)
         if (res.errMsg === 'cloud.callFunction:ok') {
           return res.result
         } else {

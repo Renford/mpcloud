@@ -15,7 +15,6 @@ const actions = {
     return api.travel
       .getPlans(0, 1)
       .then(res => {
-        console.log('home get plans ===', res)
         if (res.length > 0) {
           commit('setPlan', res[0])
         }

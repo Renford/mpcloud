@@ -1,10 +1,10 @@
 <template>
-  <div class="header-container B8">
-    <div class="C1 F2">2018-08-08</div>
+  <div class="header-container">
+    <div class="C5 F1">{{plan.date}}</div>
     <div class="detail-container">
-      <div class="C2 F4">{{plan.origin}}</div>
-      <div class="detail-arrow">--></div>
-      <div class="C2 F4">{{plan.destination}}</div>
+      <div class="C5 F4">{{plan.origin}}</div>
+      <div class="detail-arrow C5">--></div>
+      <div class="C5 F4">{{plan.destination}}</div>
     </div>
   </div>
 </template>
@@ -22,11 +22,10 @@ export default {
 
 <style scoped>
 .header-container {
-  /* padding: 30rpx; */
+  margin-top: 10rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 160rpx;
 }
 
