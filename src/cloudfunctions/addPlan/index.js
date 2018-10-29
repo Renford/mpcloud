@@ -14,8 +14,13 @@ exports.main = async (event, context) => {
     cloud.callFunction({
       name: 'addEquips',
       data: {
-        equips: equips
+        equips: equips,
+        openId: event.userInfo.openId
       }
+    })
+
+    plan.todos = equips.map(equip => {
+      return equip.name
     })
 
     return await db.collection('myplans').add({

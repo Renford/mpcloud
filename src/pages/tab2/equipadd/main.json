@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "wux-button": "/static/wux/button/index",
-    "wux-prompt": "/static/wux/prompt/index"
-  }
-}

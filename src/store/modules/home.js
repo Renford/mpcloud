@@ -13,7 +13,7 @@ const mutations = {
 const actions = {
   getPlans({ commit, state }) {
     return api.travel
-      .getPlans(1)
+      .getPlans(0, 1)
       .then(res => {
         console.log('home get plans ===', res)
         if (res.length > 0) {

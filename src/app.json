@@ -8,7 +8,7 @@
     "pages/tab1/pack/main",
     "pages/tab2/mine/main",
     "pages/tab2/equips/main",
-    "pages/tab2/equipadd/main",
+    "pages/tab2/equipedit/main",
     "pages/tab2/plans/main",
     "pages/tab2/index/main"
   ],

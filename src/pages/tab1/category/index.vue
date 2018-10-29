@@ -1,7 +1,7 @@
 <template>
   <div>  
     <wux-grids>
-      <div v-for="(item, index) in categories" :key="index">
+      <div v-for="(item, index) in cates" :key="index">
         <wux-grid :thumb="item.iconUrl" :label="item.cateName" @click="onItemTapEvent(item)"/>
       </div>
     </wux-grids>
@@ -20,13 +20,13 @@ export default {
   },
 
   computed: {
-    ...mapState('category', ['categories'])
+    ...mapState('category', ['cates'])
   },
 
   components: {},
 
   methods: {
-    ...mapActions('category', ['getCategories']),
+    ...mapActions('category', ['getCates']),
 
     onItemTapEvent(item) {
       this.$router.push({
@@ -40,7 +40,7 @@ export default {
   },
 
   mounted() {
-    this.getCategories()
+    this.getCates()
     // cates.forEach(item => {
     //   api.travel
     //     .addCategory(item)

@@ -6,22 +6,17 @@ export let TongjiUrl = 'https://webtongji.emoney.cn/Page/PageView'
 export let BaseApiUrl = `${BaseUrl}/api/`
 export let BaseWebUrl = `${BaseUrl}/RealStock/`
 
-export let posZero = 1
-export let pageSize = 30
-export let updateInterval = 5 * 1000
-export let listMaxSize = 50
+export let pageSize = 1000
 
 export let ErrorInfo = {
-  kGetDataErrorInfo: new Error('数据获取失败')
+  kGetDataErrorInfo: new Error('数据获取失败'),
+  kAddDataErrorInfo: new Error('数据添加失败')
 }
 
 export default {
   BaseApiUrl,
   BaseWebUrl,
   TongjiUrl,
-  posZero,
   pageSize,
-  listMaxSize,
-  updateInterval,
   ErrorInfo
 }

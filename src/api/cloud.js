@@ -70,6 +70,22 @@ class Cloud {
         }
       })
   }
+
+  callFunction(url, params) {
+    return wx.cloud
+      .callFunction({
+        name: url,
+        data: params
+      })
+      .then(res => {
+        console.log('res================', res)
+        if (res.errMsg === 'cloud.callFunction:ok') {
+          return res.result
+        } else {
+          return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
+        }
+      })
+  }
 }
 
 export default new Cloud()

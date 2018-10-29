@@ -27,10 +27,10 @@ export default {
   data() {
     return {
       equips: [],
-      planTitle: '',
+      planTitle: '东海裸泳',
       planDate: '2018-12-12 12:30',
-      planOrigin: '',
-      planDest: ''
+      planOrigin: '上海',
+      planDest: '东海'
     }
   },
 

@@ -1,39 +1,82 @@
 <template>
   <div>
-    <wux-button block type="balanced" open-type="getUserInfo" @getuserinfo="onGetUserInfo">userInfo</wux-button>
+
+    <div v-for="(cate, cateIndex) in equips" :key="cateIndex">
+      <wux-cell-group :title="cate.cateName">
+        <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
+          <wux-cell :title="equip.name" is-link :label="equip.type" @click="onItemEvent(equip)"></wux-cell>
+        </div>
+        <wux-cell hover-class="none">
+          <wux-input :id="cateIndex" placeholder="加一个想要的吧" clear placeholder-class="C1 F1" @confirm="onConfirm">
+            <image style="width: 20px; height: 20px; margin-right: 5px" src="/static/icon_add.png" />
+          </wux-input>
+        </wux-cell>
+      </wux-cell-group>
+    </div>
+
+    <!-- <div class="bottom-button-container">
+      <wux-button block type="balanced" @click="onAddEvent">添加装备</wux-button>
+    </div> -->
   </div>
 </template>
 
 <script>
+import store from '@/store'
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
   data() {
     return {}
   },
 
+  computed: {
+    ...mapState('equip', ['equips'])
+  },
+
   components: {},
 
   methods: {
-    onGetUserInfo(info) {
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {},
-        success: res => {
-          console.log('[云函数] [login] user openid: ', res)
-          // wx.navigateTo({
-          //   url: '../userConsole/userConsole'
-          // })
-        },
-        fail: err => {
-          console.error('[云函数] [login] 调用失败', err)
-          // wx.navigateTo({
-          //   url: '../deployFunctions/deployFunctions'
-          // })
+    ...mapActions('equip', ['getEquips', 'addEquips']),
+
+    onItemEvent(equip) {
+      const equipStr = JSON.stringify(equip)
+      this.$router.push({
+        path: '/pages/tab2/equipedit/main',
+        query: {
+          equip: equip
         }
+      })
+    },
+
+    onConfirm(e) {
+      console.log('===onConfirm', e)
+      const name = e.mp.detail.value
+      const index = parseInt(e.mp.target.id)
+      const cate = this.equips[index]
+      const equip = {
+        name: name,
+        number: 1,
+        status: 1, // 0, 虚购买，1、已拥有
+        remark: '', // 备注
+        cateId: cate.cateId,
+        cateName: cate.cateName
+      }
+
+      store.dispatch('equip/addEquips', [equip]).then(res => {
+        store.dispatch('equip/getEquips')
+      })
+    },
+
+    onAddEvent(e) {
+      this.$router.push({
+        path: '/pages/tab2/equipedit/main'
       })
     }
   },
 
-  created() {}
+  mounted() {
+    this.getEquips()
+  }
 }
 </script>
 

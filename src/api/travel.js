@@ -1,4 +1,5 @@
 import cloud from './cloud'
+import config from './config'
 import appUtils from '@/common/utils/AppUtils'
 
 class Travel {
@@ -11,36 +12,33 @@ class Travel {
   }
 
   addEquips(equips) {
-    // const that = this
-    return wx.cloud
-      .callFunction({
-        name: 'addEquips',
-        data: {
-          equips: equips
-        }
-      })
-      .then(res => {
-        console.log('===get addEquips success: ', res)
-        // if (res.errMsg === 'cloud.callFunction:ok') {
-        //   that.saveOpenId(res.result.openid)
-        // }
-      })
-      .catch(err => {
-        console.log('===get addEquips error: ', err)
-      })
+    const params = {
+      equips: equips
+    }
+    return cloud.callFunction('addEquips', params).then(res => {
+      console.log('=====add equips', res)
+      return res
+      // if (res.errMsg === 'collection.add:ok') {
+      //   return res.data
+      // } else {
+      //   return Promise.reject(config.ErrorInfo.kAddDataErrorInfo)
+      // }
+    })
   }
 
-  // addPlan(plan) {
-  //   const data = Object.assign(
-  //     {
-  //       status: 0, // 0、未开始，1、进行中，2、已完成
-  //       statusName: '未开始',
-  //       dones: []
-  //     },
-  //     plan
-  //   )
-  //   return cloud.add('myplans', data)
-  // }
+  getEquips() {
+    const params = {
+      count: config.pageSize
+    }
+    return cloud.callFunction('getEquips', params).then(res => {
+      return res
+      // if (res.errMsg === 'collection.get:ok') {
+      //   return res.data
+      // } else {
+      //   return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
+      // }
+    })
+  }
 
   addPlan(plan) {
     const data = Object.assign(
@@ -51,25 +49,30 @@ class Travel {
       },
       plan
     )
-    return wx.cloud
-      .callFunction({
-        name: 'addPlan',
-        data: {
-          plan: data
-        }
-      })
-      .then(res => {
-        console.log('===get addPlan success: ', res)
-      })
-      .catch(err => {
-        console.log('===get addPlan error: ', err)
-      })
+    const params = {
+      plan: data
+    }
+
+    return cloud.callFunction('addPlan', params).then(res => {
+      if (res.errMsg === 'collection.add:ok') {
+        return res.data
+      } else {
+        return Promise.reject(config.ErrorInfo.kAddDataErrorInfo)
+      }
+    })
   }
 
-  getPlans(count) {
-    return cloud.get('myplans', {
-      count: count,
-      _openid: appUtils.openId
+  getPlans(status, count) {
+    const params = {
+      status: status,
+      count: count
+    }
+    return cloud.callFunction('getPlan', params).then(res => {
+      if (res.errMsg === 'collection.get:ok') {
+        return res.data
+      } else {
+        return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
+      }
     })
   }
 

@@ -30,7 +30,7 @@ export default {
   },
 
   computed: {
-    ...mapState('equipment', ['categories'])
+    ...mapState('category', ['categories'])
   },
 
   components: {
@@ -38,7 +38,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('equipment', ['getCategories']),
+    ...mapActions('category', ['getCategories']),
 
     onFormSubmit(e) {
       console.log('===onFormSubmit', e.mp.detail.value, this.categories)
@@ -82,9 +82,9 @@ const obj2Array = (obj, that) => {
     selIndexs.forEach(index => {
       equips.push({
         name: cate.equips[parseInt(index)],
-        type: '',
         number: 1,
-        status: false,
+        status: 1, // 0, 虚购买，1、已拥有
+        remark: '', // 备注
         cateId: cate.cateId,
         cateName: cate.cateName
       })
