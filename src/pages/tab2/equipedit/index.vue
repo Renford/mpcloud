@@ -23,9 +23,11 @@
 </template>
 
 <script>
-import api from '@/api/api'
-
 import { $wuxSelect, $wuxToast } from '../../../../static/wux/index'
+
+import api from '@/api/api'
+import store from '@/store'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import appUtils from '@/common/utils/AppUtils'
 export default {
@@ -48,6 +50,8 @@ export default {
   components: {},
 
   methods: {
+    ...mapActions('category', ['getCates']),
+
     onNameChange(e) {
       this.equip.name = e.mp.detail.value
     },
@@ -103,6 +107,15 @@ export default {
   mounted() {
     this.equip = JSON.parse(this.$route.query.equip)
     console.log('===equip:', this.equip)
+
+    const that = this
+    if (appUtils.cates.length === 0) {
+      this.getCates().then(res => {
+        that.cateNames = appUtils.cates.map(cate => {
+          return cate.cateName
+        })
+      })
+    }
   },
 
   onLoad() {}

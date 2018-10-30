@@ -17,9 +17,6 @@ const mutations = {
 
 const actions = {
   getCates({ commit, state }) {
-    // const cateIds = ['yiwu', 'dianzi', 'xishu']
-    // const _ = wx.cloud.database().command
-    // const ids = _.nin(cateIds)
     return api.travel
       .getCategories()
       .then(res => {

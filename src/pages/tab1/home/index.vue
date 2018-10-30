@@ -1,7 +1,13 @@
 <template>
   <div class="home-container">
+
+    <div v-if="viewStatus === -1">
+      <div class="nodata-container">
+        <wux-prompt :visible="viewStatus === -1" icon='' title="加载中..."/>
+      </div>
+    </div>
     
-    <div v-if="viewStatus === 0">
+    <div v-else-if="viewStatus === 0">
       <div class="nodata-container">
         <wux-prompt :visible="viewStatus === 0" text="登录失败, 点击重试" @click="onLoginEvent" />
       </div>
@@ -19,18 +25,20 @@
         <home-header :plan="plan"></home-header>
       </div>
 
-      <wux-divider text="未收纳" dashed/>
+      <wux-divider text="未收纳"/>
       <div v-for="(cate, cateIndex) in plan.todos" :key="cateIndex">
-        <wux-cell-group :title="cate.cateName">
-          <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-            <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
-          </div>
-        </wux-cell-group>
+        <div v-if="cate.equips.length > 0">
+          <wux-cell-group :title="cate.cateName">
+            <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
+              <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
+            </div>
+          </wux-cell-group>
+        </div>
       </div>
 
-      <div v-if="plan.dones.length > 0">
-        <wux-divider text="已收纳" dashed/>
-        <div v-for="(cate, cateIndex) in plan.dones" :key="cateIndex">
+      <wux-divider text="已收纳"/>
+      <div v-for="(cate, cateIndex) in plan.dones" :key="cateIndex">
+        <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
             <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
               <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
@@ -40,7 +48,7 @@
       </div>
 
       <div class="bottom-fixed-container" :style="{height: bottomHeight+'px'}">
-        <button class="bottom-button" plain @click="onShowPackPage">{{nextBtnTitle}}</button>
+        <button class="bottom-button" plain @click="onShowPackPage">{{bottomBtnTitle}}</button>
       </div>
 
       <div class="user-container">
@@ -66,9 +74,8 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      viewStatus: 0, // 0、未登录，1、无数据，2、有数据
-      headUrl: appUtils.userInfo.avatarUrl,
-      nextBtnTitle: '开始打包'
+      viewStatus: -1, // -1、数据加载中，0、未登录，1、无数据，2、有数据
+      headUrl: appUtils.userInfo.avatarUrl
     }
   },
 
@@ -78,6 +85,16 @@ export default {
     bottomHeight: {
       get: function() {
         return appUtils.bottomHeight
+      }
+    },
+
+    bottomBtnTitle: {
+      get: function() {
+        let title = '开始打包'
+        if (Object.keys(this.plan).length > 0 && this.plan.status === 1) {
+          title = '继续打包'
+        }
+        return title
       }
     }
   },
@@ -139,7 +156,7 @@ export default {
   },
 
   onShow() {
-    updateViewStatus(this)
+    // updateViewStatus(this)
     getCurrentPlan(this)
   }
 }
@@ -200,8 +217,8 @@ function updateViewStatus(that) {
 .user-container {
   position: fixed;
   z-index: 100;
-  right: 20rpx;
-  bottom: 200rpx;
+  right: 30rpx;
+  bottom: 210rpx;
   width: 100rpx;
   height: 100rpx;
   background-color: darkgrey;
@@ -211,8 +228,8 @@ function updateViewStatus(that) {
 .user-button {
   position: fixed;
   z-index: 101;
-  right: 20rpx;
-  bottom: 200rpx;
+  right: 30rpx;
+  bottom: 210rpx;
   width: 100rpx;
   height: 100rpx;
   border-radius: 50rpx;

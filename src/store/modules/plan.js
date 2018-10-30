@@ -23,6 +23,8 @@ const actions = {
       .then(res => {
         if (res.length > 0) {
           commit('setPlan', res[0])
+        } else {
+          commit('setPlan', {})
         }
       })
       .catch(err => {

@@ -32,10 +32,10 @@ export default {
   data() {
     return {
       equips: [],
-      planTitle: '东海裸泳',
+      planTitle: '',
       planDate: '',
-      planOrigin: '上海',
-      planDest: '东海'
+      planOrigin: '',
+      planDest: ''
     }
   },
 
@@ -63,7 +63,6 @@ export default {
       $wuxCalendar().open({
         value: values,
         onChange: (values, displayValues) => {
-          console.log('===wux-clendar--onChange', values, displayValues)
           that.planDate = displayValues[0]
         }
       })
@@ -108,7 +107,7 @@ const isDataValid = that => {
   if (that.planTitle.length === 0) {
     $wuxToast().show({
       type: 'text',
-      text: '标题不能少哦!'
+      text: '没有标题的规划不是一个好规划'
     })
     result = false
   }
@@ -116,7 +115,7 @@ const isDataValid = that => {
   if (that.planDate.length === 0) {
     $wuxToast().show({
       type: 'text',
-      text: '选个日期吧!'
+      text: '选个出发日期呗'
     })
     result = false
   }
@@ -124,7 +123,7 @@ const isDataValid = that => {
   if (that.planOrigin.length === 0) {
     $wuxToast().show({
       type: 'text',
-      text: '从哪出发的?'
+      text: '没有始发地，小的不知从哪出发!'
     })
     result = false
   }
@@ -132,7 +131,7 @@ const isDataValid = that => {
   if (that.planDest.length === 0) {
     $wuxToast().show({
       type: 'text',
-      text: '想去哪里?'
+      text: '没有目的地，小的不知去往哪里!'
     })
     result = false
   }

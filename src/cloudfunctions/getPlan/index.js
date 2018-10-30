@@ -25,6 +25,7 @@ exports.main = async (event, context) => {
     if (res.data !== undefined) {
       for (let i = 0; i < res.data.length; i++) {
         const plan = res.data[i]
+
         const result = await db
           .collection('myequips')
           .where({
@@ -32,9 +33,18 @@ exports.main = async (event, context) => {
             name: _.in(plan.todos)
           })
           .get()
-
         plan.todos = arr2section(result.data)
-        if (plan.dones.length === 0) {
+
+        if (plan.dones.length > 0) {
+          const result = await db
+            .collection('myequips')
+            .where({
+              _openid: openId,
+              name: _.in(plan.dones)
+            })
+            .get()
+          plan.dones = arr2section(result.data)
+        } else {
           const todos = JSON.parse(JSON.stringify(plan.todos))
           plan.dones = todos.map(cate => {
             cate.equips = []
@@ -50,6 +60,22 @@ exports.main = async (event, context) => {
   }
 }
 
+// [name] => [{cateId, cateName}]
+const handleCates = async (names, openId) => {
+  console.log('=======11111', names)
+  const result = await db
+    .collection('myequips')
+    .where({
+      _openid: openId,
+      name: _.in(names)
+    })
+    .get()
+
+  console.log('====22222', result)
+  return arr2section(result.data)
+}
+
+// 确定数据返回顺序
 const cateIds = [
   'luying',
   'dengshan',

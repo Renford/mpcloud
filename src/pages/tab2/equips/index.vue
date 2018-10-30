@@ -7,7 +7,7 @@
           <wux-cell :title="equip.name" is-link :label="equip.type" @click="onItemEvent(equip)"></wux-cell>
         </div>
         <wux-cell hover-class="none">
-          <wux-input :id="cateIndex" placeholder="加一个想要的吧" clear placeholder-class="C1 F1" @confirm="onConfirm">
+          <wux-input :id="cateIndex" placeholder="添加新装备" clear placeholder-class="C1 F1" @confirm="onConfirm">
             <image style="width: 20px; height: 20px; margin-right: 5px" src="/static/icon_add.png" />
           </wux-input>
         </wux-cell>

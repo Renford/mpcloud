@@ -7,7 +7,7 @@ const CategoriesKey = 'CategoriesKey'
 class AppUtils {
   openId = ''
   userInfo = {}
-  bottomHeight = 0
+  bottomHeight = 48
   cates = []
 
   saveOpenId(openId) {
@@ -63,8 +63,8 @@ class AppUtils {
     wx.getSystemInfo({
       success: function(res) {
         console.log('=====system info:', res)
-        const height = res.screenHeight - res.windowHeight
-        if (height < 80) {
+        that.bottomHeight = res.screenHeight - res.windowHeight
+        if (that.bottomHeight < 80) {
           that.bottomHeight = 48
         }
       },

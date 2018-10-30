@@ -52,8 +52,6 @@ class Cloud {
       delete ops.count
     }
 
-    console.log('===ops====', ops, count)
-
     const db = wx.cloud.database()
     return db
       .collection(url)

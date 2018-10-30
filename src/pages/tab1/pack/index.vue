@@ -40,51 +40,85 @@ export default {
 
   methods: {
     onFormSubmit(e) {
-      console.log('===onFormSubmit', e)
+      let type = 0
+      const obj = e.mp.detail.value
       const tag = e.mp.detail.target.id
       if (tag === '100') {
-        this.plan.status = 1
-        this.plan.statusName = '进行中'
+        type = 1
       } else if (tag === '101') {
-        this.plan.status = 2
-        this.plan.statusName = '已完成'
+        type = 2
       }
 
-      const obj = e.mp.detail.value
-
-      // api.travel
-      //   .updatePlan(this.plan._id, this.plan)
-      //   .then(res => {
-      //     console.log('===update res ===', res)
-      //   })
-      //   .catch(err => {
-      //     console.log('===update err ===', err)
-      //   })
+      todos2dones(obj, type, this)
+      updatePlan(obj, this)
     }
   },
 
   mounted() {
     this.plan = JSON.parse(this.$route.query.plan)
-    console.log('=====plan=====', this.plan.todos)
+    console.log('=====plan=====', this.plan)
   },
 
   created() {}
 }
 
-const todos2dones = (obj, that) => {
-  const todos = that.plan.todos
-  const dones = that.plan.dones === [] ? todos : that.plan.dones
-  const tempObj = {}
-  todos.forEach(cate => {
-    const indexs = obj[cate.Name]
-    if (indexs.length > 0) {
-      const array = indexs.map(index => {
-        return cate.equips[parseInt(index)]
-      })
+const updatePlan = (obj, that) => {
+  api.travel
+    .updatePlan(that.plan._id, that.plan)
+    .then(res => {
+      that.$router.back()
+    })
+    .catch(err => {
+      console.log('===update err ===', err)
+    })
+}
 
-      tempObj[cate.cateId] = array
+const todos2dones = (obj, type, that) => {
+  const plan = that.plan
+
+  let todos = []
+  let dones = []
+  let selects = []
+
+  plan.todos.forEach(cate => {
+    const arr = cate.equips.map(equip => {
+      return equip.name
+    })
+    todos = todos.concat(arr)
+
+    const indexs = obj[cate.cateName]
+    if (indexs.length > 0) {
+      const arr = indexs.map(index => {
+        return cate.equips[parseInt(index)].name
+      })
+      selects = selects.concat(arr)
     }
   })
+
+  plan.dones.forEach(cate => {
+    const arr = cate.equips.map(equip => {
+      return equip.name
+    })
+    dones = dones.concat(arr)
+  })
+
+  if (type === 1) {
+    plan.status = 1
+    plan.statusName = '进行中'
+    selects.forEach(name => {
+      dones.push(name)
+      todos.splice(todos.indexOf(name), 1)
+    })
+    plan.todos = todos
+    plan.dones = dones
+  } else if (type === 2) {
+    plan.status = 2
+    plan.statusName = '已完成'
+    plan.todos = []
+    plan.dones = dones.concat(todos)
+  }
+
+  that.plan = plan
 }
 </script>
 
