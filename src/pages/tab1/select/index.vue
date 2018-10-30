@@ -41,9 +41,7 @@ export default {
     ...mapActions('category', ['getCategories']),
 
     onFormSubmit(e) {
-      console.log('===onFormSubmit', e.mp.detail.value, this.categories)
       const array = obj2Array(e.mp.detail.value, this)
-      console.log('===onFormSubmit', array)
       this.$router.push({
         path: '/pages/tab1/commit/main',
         query: {

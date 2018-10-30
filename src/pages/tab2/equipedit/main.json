@@ -2,10 +2,12 @@
   "navigationBarTitleText": "装备编辑",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
+    "wux-toast": "/static/wux/toast/index",
     "wux-prompt": "/static/wux/prompt/index",
     "wux-cell-group": "/static/wux/cell-group/index",
     "wux-cell": "/static/wux/cell/index",
     "wux-input": "/static/wux/input/index",
-    "wux-input-number": "/static/wux/input-number/index"
+    "wux-input-number": "/static/wux/input-number/index",
+    "wux-select": "/static/wux/select/index"
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>  
     <wux-grids>
-      <div v-for="(item, index) in cates" :key="index">
+      <div v-for="(item, index) in showCates" :key="index">
         <wux-grid :thumb="item.iconUrl" :label="item.cateName" @click="onItemTapEvent(item)"/>
       </div>
     </wux-grids>
@@ -20,7 +20,16 @@ export default {
   },
 
   computed: {
-    ...mapState('category', ['cates'])
+    ...mapState('category', ['cates']),
+
+    showCates: {
+      get: function() {
+        return this.cates.filter(cate => {
+          const arr = ['dianzi', 'yiwu', 'xishu']
+          return arr.indexOf(cate.cateId) === -1
+        })
+      }
+    }
   },
 
   components: {},

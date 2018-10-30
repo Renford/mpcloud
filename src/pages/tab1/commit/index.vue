@@ -1,5 +1,8 @@
 <template>
   <div>
+    <wux-calendar id="wux-calendar" />
+    <wux-toast id="wux-toast" />
+
     <wux-cell-group>
       <wux-cell hover-class="none">
         <wux-input label="标题" placeholder="定个标题吧" focus @change="onTitleChange"></wux-input>
@@ -10,7 +13,7 @@
       <wux-cell hover-class="none">
         <wux-input label="目的地" placeholder="我想去哪儿" @change="onDestChange">></wux-input>
       </wux-cell>
-      <wux-cell title="活动日期" is-link></wux-cell>
+      <wux-cell title="活动日期" is-link :extra="planDate" @click="onDateEvent"></wux-cell>
     </wux-cell-group>
 
     <div class="bottom-button-container">
@@ -23,12 +26,14 @@
 <script>
 import api from '@/api/api'
 
+import { $wuxCalendar, $wuxToast } from '../../../../static/wux/index'
+
 export default {
   data() {
     return {
       equips: [],
       planTitle: '东海裸泳',
-      planDate: '2018-12-12 12:30',
+      planDate: '',
       planOrigin: '上海',
       planDest: '东海'
     }
@@ -49,23 +54,39 @@ export default {
       this.planDest = e.mp.detail.value
     },
 
+    onDateEvent(e) {
+      let values = [new Date().getTime()]
+      if (this.planDate.length > 0) {
+        values = [this.planDate]
+      }
+      const that = this
+      $wuxCalendar().open({
+        value: values,
+        onChange: (values, displayValues) => {
+          console.log('===wux-clendar--onChange', values, displayValues)
+          that.planDate = displayValues[0]
+        }
+      })
+    },
+
     onSubmitEvent(e) {
-      console.log('submit====', e)
+      if (isDataValid(this) === false) {
+        return
+      }
+
       let plan = {
         title: this.planTitle,
         date: this.planDate,
-        origin: this.planOrigin,
+        originating: this.planOrigin,
         destination: this.planDest,
-        todos: this.equips
+        todos: this.equips,
+        dones: []
       }
-
-      // api.travel.addEquips(this.equips)
 
       const that = this
       api.travel
         .addPlan(plan)
         .then(res => {
-          console.log('add plan sucess====')
           that.$router.push({ path: '/pages/tab1/home/main', reLaunch: true })
         })
         .catch(err => {
@@ -76,10 +97,47 @@ export default {
 
   mounted() {
     this.equips = JSON.parse(this.$route.query.equips)
-    console.log('======moutedn', this.equips)
+    console.log('======equips', this.equips)
   },
 
   created() {}
+}
+
+const isDataValid = that => {
+  let result = true
+  if (that.planTitle.length === 0) {
+    $wuxToast().show({
+      type: 'text',
+      text: '标题不能少哦!'
+    })
+    result = false
+  }
+
+  if (that.planDate.length === 0) {
+    $wuxToast().show({
+      type: 'text',
+      text: '选个日期吧!'
+    })
+    result = false
+  }
+
+  if (that.planOrigin.length === 0) {
+    $wuxToast().show({
+      type: 'text',
+      text: '从哪出发的?'
+    })
+    result = false
+  }
+
+  if (that.planDest.length === 0) {
+    $wuxToast().show({
+      type: 'text',
+      text: '想去哪里?'
+    })
+    result = false
+  }
+
+  return result
 }
 </script>
 

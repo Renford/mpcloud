@@ -23,7 +23,7 @@
       <div v-for="(cate, cateIndex) in plan.todos" :key="cateIndex">
         <wux-cell-group :title="cate.cateName">
           <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-            <wux-cell :title="equip.name" is-link :label="equip.typeName" :extra="equip.typeName" @click="onItemEvent(equip)"></wux-cell>
+            <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
           </div>
         </wux-cell-group>
       </div>
@@ -33,13 +33,13 @@
         <div v-for="(cate, cateIndex) in plan.dones" :key="cateIndex">
           <wux-cell-group :title="cate.cateName">
             <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-              <wux-cell :title="equip.name" is-link :label="equip.typeName" :extra="equip.typeName" @click="onItemEvent(equip)"></wux-cell>
+              <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
             </div>
           </wux-cell-group>
         </div>
       </div>
 
-      <div class="bottom-container" :style="{height: bottomHeight+'px'}">
+      <div class="bottom-fixed-container" :style="{height: bottomHeight+'px'}">
         <button class="bottom-button" plain @click="onShowPackPage">{{nextBtnTitle}}</button>
       </div>
 
@@ -73,7 +73,7 @@ export default {
   },
 
   computed: {
-    ...mapState('home', ['plan']),
+    ...mapState('plan', ['plan']),
 
     bottomHeight: {
       get: function() {
@@ -88,7 +88,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('home', ['getPlans']),
+    ...mapActions('plan', ['getCurrentPlan']),
 
     onLoginEvent(e) {
       getOpenId(this)
@@ -123,39 +123,41 @@ export default {
     },
 
     onItemEvent(equip) {
-      console.log('equips=====', equip)
       const equipStr = JSON.stringify(equip)
       this.$router.push({
         path: '/pages/tab2/equipedit/main',
         query: {
-          equip: equip
+          equip: equipStr
         }
       })
     }
   },
 
   mounted() {
+    // updateViewStatus(this)
+    // getCurrentPlan(this)
+  },
+
+  onShow() {
     updateViewStatus(this)
-    getPlans(this)
+    getCurrentPlan(this)
   }
 }
 
 function getOpenId(that) {
   appUtils.getOpenId().then(res => {
-    getPlans(that)
+    getCurrentPlan(that)
   })
 }
 
-function getPlans(that) {
-  if (that.viewStatus !== 1) {
-    return
-  }
-
+function getCurrentPlan(that) {
   that
-    .getPlans()
+    .getCurrentPlan()
     .then(res => {
-      wx.setNavigationBarTitle({ title: that.plan.title })
       updateViewStatus(that)
+      if (Object.keys(that.plan).length > 0) {
+        wx.setNavigationBarTitle({ title: that.plan.title })
+      }
     })
     .catch(err => {
       console.log('err====', err)
@@ -185,15 +187,6 @@ function updateViewStatus(that) {
   top: 0;
   width: 100%;
   height: 160rpx;
-  background-color: #282a34;
-}
-
-.bottom-container {
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background-color: #282a34;
 }
 

@@ -1,4 +1,5 @@
 import api from '@/api/api'
+import appUtils from '@/common/utils/AppUtils'
 
 const state = {
   cates: [], // 大类，不包含equips
@@ -16,14 +17,14 @@ const mutations = {
 
 const actions = {
   getCates({ commit, state }) {
-    const cateIds = ['yiwu', 'dianzi', 'xishu']
-    const _ = wx.cloud.database().command
-    const ids = _.nin(cateIds)
+    // const cateIds = ['yiwu', 'dianzi', 'xishu']
+    // const _ = wx.cloud.database().command
+    // const ids = _.nin(cateIds)
     return api.travel
-      .getCategories(ids)
+      .getCategories()
       .then(res => {
-        console.log('setCates ===', res)
         commit('setCates', res)
+        appUtils.saveCates(res)
       })
       .catch(err => {
         console.log('===errr:', err)

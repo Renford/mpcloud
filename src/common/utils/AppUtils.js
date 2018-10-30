@@ -2,11 +2,13 @@ import api from '@/api/api'
 
 const OpenIdKey = 'OpenIdKey'
 const UserInfoKey = 'UserInfoKey'
+const CategoriesKey = 'CategoriesKey'
 
 class AppUtils {
   openId = ''
   userInfo = {}
-  bottomHeight = 96
+  bottomHeight = 0
+  cates = []
 
   saveOpenId(openId) {
     this.openId = openId
@@ -21,6 +23,14 @@ class AppUtils {
     wx.setStorage({
       key: UserInfoKey,
       data: userInfo
+    })
+  }
+
+  saveCates(cates) {
+    this.cates = cates
+    wx.setStorage({
+      key: CategoriesKey,
+      data: cates
     })
   }
 
@@ -39,14 +49,24 @@ class AppUtils {
         that.userInfo = res.data
       }
     })
+
+    wx.getStorage({
+      key: CategoriesKey,
+      success: res => {
+        that.cates = res.data
+      }
+    })
   }
 
   getSystemInfo() {
     const that = this
     wx.getSystemInfo({
       success: function(res) {
-        that.bottomHeight = res.screenHeight - res.windowHeight
         console.log('=====system info:', res)
+        const height = res.screenHeight - res.windowHeight
+        if (height < 80) {
+          that.bottomHeight = 48
+        }
       },
       fail: function(err) {
         console.log('=====system info', err)

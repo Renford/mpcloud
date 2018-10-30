@@ -2,6 +2,8 @@
   "navigationBarTitleText": "我的计划",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
-    "wux-prompt": "/static/wux/prompt/index"
+    "wux-prompt": "/static/wux/prompt/index",
+    "wux-cell-group": "/static/wux/cell-group/index",
+    "wux-card": "/static/wux/card/index"
   }
 }

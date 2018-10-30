@@ -2,7 +2,7 @@
   <div class="header-container">
     <div class="C5 F1">{{plan.date}}</div>
     <div class="detail-container">
-      <div class="C5 F4">{{plan.origin}}</div>
+      <div class="C5 F4">{{plan.originating}}</div>
       <div class="detail-arrow C5">--></div>
       <div class="C5 F4">{{plan.destination}}</div>
     </div>

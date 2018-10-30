@@ -4,6 +4,8 @@
     "wux-cell": "/static/wux/cell/index",
     "wux-cell-group": "/static/wux/cell-group/index",
     "wux-input": "/static/wux/input/index",
+    "wux-calendar": "/static/wux/calendar/index",
+    "wux-toast": "/static/wux/toast/index",
     "wux-button": "/static/wux/button/index"
   }
 }

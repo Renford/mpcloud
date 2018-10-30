@@ -30,3 +30,12 @@
 .bottom-button-container {
   padding: 40rpx;
 }
+
+.bottom-fixed-container {
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #282a34;
+}

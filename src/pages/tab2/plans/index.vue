@@ -1,36 +1,45 @@
 <template>
   <div>
-    <wux-button block type="balanced" open-type="getUserInfo" @getuserinfo="onGetUserInfo">userInfo</wux-button>
+
+    <wux-cell-group>
+      <div v-for="(plan, index) in plans" :key="index">
+        <wux-card :title="plan.title" :extra="plan.statusName">
+          <div slot="body">{{plan.originating + '-->' + plan.destination}}</div>
+          <div slot="footer">{{plan.date}}</div>
+        </wux-card>
+      </div>
+    </wux-cell-group>
+
   </div>
 </template>
 
 <script>
+import store from '@/store'
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
   data() {
     return {}
   },
 
+  computed: {
+    ...mapState('plan', ['plans'])
+  },
   components: {},
 
   methods: {
-    onGetUserInfo(info) {
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {},
-        success: res => {
-          console.log('[云函数] [login] user openid: ', res)
-          // wx.navigateTo({
-          //   url: '../userConsole/userConsole'
-          // })
-        },
-        fail: err => {
-          console.error('[云函数] [login] 调用失败', err)
-          // wx.navigateTo({
-          //   url: '../deployFunctions/deployFunctions'
-          // })
-        }
-      })
+    ...mapActions('plan', ['getPlans']),
+
+    onCreateEvent(e) {
+      console.log('e==========', e)
     }
+  },
+
+  mounted() {
+    const that = this
+    this.getPlans().then(res => {
+      console.log('plans====', that.plans)
+    })
   },
 
   created() {}

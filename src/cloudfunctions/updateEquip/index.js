@@ -8,18 +8,17 @@ const _ = db.command
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const plan = event.plan
-  const planId = plan._id
-  delete plan._id
-
+  const equip = event.equip
+  const equipId = equip._id
+  delete equip._id
   try {
     return await db
-      .collection('myplans')
-      .doc(planId)
+      .collection('myequips')
+      .doc(equipId)
       .set({
-        data: plan
+        data: equip
       })
   } catch (e) {
-    console.error('===update my plans: ', e)
+    console.error('===update equips: ', e)
   }
 }

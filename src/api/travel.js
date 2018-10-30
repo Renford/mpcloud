@@ -4,11 +4,15 @@ import appUtils from '@/common/utils/AppUtils'
 
 class Travel {
   getCategories(ids) {
-    return cloud.get('categories', { cateId: ids })
+    let params = {}
+    if (ids !== undefined) {
+      params = { cateId: ids }
+    }
+    return cloud.get('categories', params)
   }
 
-  addCategory(params) {
-    return cloud.add('categories', params)
+  addCategory(cate) {
+    return cloud.add('categories', cate)
   }
 
   addEquips(equips) {
@@ -40,12 +44,25 @@ class Travel {
     })
   }
 
+  updateEquip(equip) {
+    const params = {
+      equip: equip
+    }
+    return cloud.callFunction('updateEquip', params).then(res => {
+      // return res
+      if (res.errMsg === 'document.set:ok') {
+        return res._id
+      } else {
+        return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
+      }
+    })
+  }
+
   addPlan(plan) {
     const data = Object.assign(
       {
-        status: 0, // 0、未开始，1、进行中，2、已完成
-        statusName: '未开始',
-        dones: []
+        status: 0,
+        statusName: '未开始'
       },
       plan
     )
@@ -54,7 +71,7 @@ class Travel {
     }
 
     return cloud.callFunction('addPlan', params).then(res => {
-      if (res.errMsg === 'collection.add:ok') {
+      if (res != null && res.errMsg === 'collection.add:ok') {
         return res.data
       } else {
         return Promise.reject(config.ErrorInfo.kAddDataErrorInfo)
@@ -62,13 +79,14 @@ class Travel {
     })
   }
 
+  // status: 状态数组，0、未开始，1、进行中，2、已完成
   getPlans(status, count) {
     const params = {
       status: status,
       count: count
     }
     return cloud.callFunction('getPlan', params).then(res => {
-      if (res.errMsg === 'collection.get:ok') {
+      if (res != null && res.errMsg === 'collection.get:ok') {
         return res.data
       } else {
         return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)

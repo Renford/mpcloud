@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
       .collection('myplans')
       .where({
         _openid: openId,
-        status: status
+        status: _.in(status)
       })
       .limit(count)
       .get()
@@ -32,7 +32,15 @@ exports.main = async (event, context) => {
             name: _.in(plan.todos)
           })
           .get()
+
         plan.todos = arr2section(result.data)
+        if (plan.dones.length === 0) {
+          const todos = JSON.parse(JSON.stringify(plan.todos))
+          plan.dones = todos.map(cate => {
+            cate.equips = []
+            return cate
+          })
+        }
       }
     }
 

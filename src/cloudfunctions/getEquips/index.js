@@ -19,11 +19,7 @@ exports.main = async (event, context) => {
       })
       .limit(count)
       .get()
-    console.log('=====1111', result)
-    const res = arr2section(result.data)
-    console.log('=====2222', res)
-
-    return res
+    return arr2section(result.data)
   } catch (error) {
     console.error('===add plan error:', error)
   }
