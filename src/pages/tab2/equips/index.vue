@@ -4,7 +4,7 @@
     <div v-for="(cate, cateIndex) in equips" :key="cateIndex">
       <wux-cell-group :title="cate.cateName">
         <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-          <wux-cell :title="equip.name" is-link :label="equip.type" @click="onItemEvent(equip)"></wux-cell>
+          <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
         </div>
         <wux-cell hover-class="none">
           <wux-input :id="cateIndex" placeholder="添加新装备" clear placeholder-class="C1 F1" @confirm="onConfirm">
@@ -43,7 +43,7 @@ export default {
       this.$router.push({
         path: '/pages/tab2/equipedit/main',
         query: {
-          equip: equip
+          equip: equipStr
         }
       })
     },
@@ -65,13 +65,13 @@ export default {
       store.dispatch('equip/addEquips', [equip]).then(res => {
         store.dispatch('equip/getEquips')
       })
-    },
-
-    onAddEvent(e) {
-      this.$router.push({
-        path: '/pages/tab2/equipedit/main'
-      })
     }
+
+    // onAddEvent(e) {
+    //   this.$router.push({
+    //     path: '/pages/tab2/equipedit/main'
+    //   })
+    // }
   },
 
   mounted() {

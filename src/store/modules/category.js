@@ -17,8 +17,10 @@ const mutations = {
 
 const actions = {
   getCates({ commit, state }) {
+    const ids = []
+    const fields = ['_id', 'cateId', 'cateName', 'iconUrl']
     return api.travel
-      .getCategories()
+      .getCategories(ids, fields)
       .then(res => {
         commit('setCates', res)
         appUtils.saveCates(res)
@@ -29,11 +31,9 @@ const actions = {
   },
 
   getCategories({ commit, state }, id) {
-    const cateIds = [id, 'yiwu', 'dianzi', 'xishu']
-    const _ = wx.cloud.database().command
-    const ids = _.in(cateIds)
+    const ids = [id, 'yiwu', 'dianzi', 'xishu']
     return api.travel
-      .getCategories(ids)
+      .getCategories(ids, [])
       .then(res => {
         commit('setCategories', res)
       })

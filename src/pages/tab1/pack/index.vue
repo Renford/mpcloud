@@ -1,5 +1,8 @@
 <template>
   <div class="pack-container">
+    
+    <wux-dialog id="wux-dialog" />
+
     <form @submit="onFormSubmit">
       <div v-for="(cate, cateIndex) in plan.todos" :key="cateIndex">
         <cate-group :cate="cate"></cate-group>
@@ -18,6 +21,7 @@ import api from '@/api/api'
 import appUtils from '@/common/utils/AppUtils'
 
 import CateGroup from '@/components/CateGroup'
+import { $wuxDialog } from '../../../../static/wux/index'
 
 export default {
   data() {
@@ -49,8 +53,26 @@ export default {
         type = 2
       }
 
-      todos2dones(obj, type, this)
-      updatePlan(obj, this)
+      const that = this
+      if (type === 2) {
+        $wuxDialog().confirm({
+          resetOnClose: true,
+          closable: false,
+          title: '小提示',
+          content: '所有装备都已装包了嘛？',
+          onConfirm(e) {
+            todos2dones(obj, type, that)
+            updatePlan(obj, that)
+          }
+        })
+      } else {
+        if (isSelectEmpty(obj)) {
+          this.$router.back()
+        } else {
+          todos2dones(obj, type, that)
+          updatePlan(obj, that)
+        }
+      }
     }
   },
 
@@ -60,6 +82,14 @@ export default {
   },
 
   created() {}
+}
+
+const isSelectEmpty = obj => {
+  let count = 0
+  Object.keys(obj).forEach(key => {
+    count += obj[key].length
+  })
+  return count === 0
 }
 
 const updatePlan = (obj, that) => {
@@ -86,7 +116,7 @@ const todos2dones = (obj, type, that) => {
     })
     todos = todos.concat(arr)
 
-    const indexs = obj[cate.cateName]
+    const indexs = obj[cate.cateId]
     if (indexs.length > 0) {
       const arr = indexs.map(index => {
         return cate.equips[parseInt(index)].name

@@ -3,7 +3,7 @@
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
     "wux-prompt": "/static/wux/prompt/index",
-    "wux-cell-group": "/static/wux/cell-group/index",
+    "wux-wing-blank": "/static/wux/wing-blank/index",
     "wux-card": "/static/wux/card/index"
   }
 }

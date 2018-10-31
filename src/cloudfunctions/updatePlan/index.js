@@ -19,6 +19,9 @@ exports.main = async (event, context) => {
       .set({
         data: plan
       })
+      .then(res => {
+        return res.data
+      })
   } catch (e) {
     console.error('===update my plans: ', e)
   }

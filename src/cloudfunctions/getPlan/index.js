@@ -54,7 +54,7 @@ exports.main = async (event, context) => {
       }
     }
 
-    return res
+    return res.data
   } catch (error) {
     console.error('===add plan error:', error)
   }
@@ -62,7 +62,6 @@ exports.main = async (event, context) => {
 
 // [name] => [{cateId, cateName}]
 const handleCates = async (names, openId) => {
-  console.log('=======11111', names)
   const result = await db
     .collection('myequips')
     .where({
@@ -71,7 +70,6 @@ const handleCates = async (names, openId) => {
     })
     .get()
 
-  console.log('====22222', result)
   return arr2section(result.data)
 }
 

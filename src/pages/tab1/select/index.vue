@@ -2,10 +2,10 @@
   <div>
     <form @submit="onFormSubmit">
       <div v-for="(cate, cateIndex) in categories" :key="cateIndex">
-        <equipment-group :equipment="cate"></equipment-group>
+        <cate-group :cate="cate"></cate-group>
       </div>
       
-      <div class="bottom-button-container">
+      <div class="bottom-button-container" v-if="categories.length > 0">
         <button class="form-button" formType="submit">下一步</button>
       </div>
     </form>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import EquipmentGroup from '@/components/EquipmentGroup'
+import CateGroup from '@/components/CateGroup'
 
 import api from '@/api/api'
 
@@ -34,13 +34,14 @@ export default {
   },
 
   components: {
-    EquipmentGroup
+    CateGroup
   },
 
   methods: {
     ...mapActions('category', ['getCategories']),
 
     onFormSubmit(e) {
+      console.log('======onFormSubmit', e)
       const array = obj2Array(e.mp.detail.value, this)
       this.$router.push({
         path: '/pages/tab1/commit/main',

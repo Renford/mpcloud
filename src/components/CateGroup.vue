@@ -1,8 +1,13 @@
 <template>
   <div>
-    <wux-checkbox-group :name="cate.cateName" :value="selectIndexs" :title="cate.cateName" @change="onChange">
+    <wux-checkbox-group :name="cate.cateId" :value="selectIndexs" :title="cate.cateName" @change="onChange">
       <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-        <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equipIndex"/>
+        <div v-if="cellType === true">
+          <wux-checkbox color="balanced" :title="equip" :value="equipIndex"/>
+        </div>
+        <div v-else>
+          <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equipIndex"/>
+        </div>
       </div>
     </wux-checkbox-group>
   </div>
@@ -23,6 +28,13 @@ export default {
     }
   },
 
+  computed: {
+    cellType() {
+      const equip = this.cate.equips[0]
+      return typeof equip === 'string'
+    }
+  },
+
   methods: {
     onChange(e) {
       const index = e.mp.detail.index + ''
@@ -35,7 +47,9 @@ export default {
     }
   },
 
-  mounted() {}
+  onUnload() {
+    this.selectIndexs = []
+  }
 }
 </script>
 

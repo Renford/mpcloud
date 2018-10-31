@@ -18,6 +18,9 @@ exports.main = async (event, context) => {
       .set({
         data: equip
       })
+      .then(res => {
+        return res.data
+      })
   } catch (e) {
     console.error('===update equips: ', e)
   }

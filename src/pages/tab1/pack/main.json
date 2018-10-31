@@ -2,6 +2,7 @@
   "navigationBarTitleText": "打包",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
+    "wux-dialog": "/static/wux/dialog/index",
     "wux-checkbox-group": "/static/wux/checkbox-group/index",
     "wux-checkbox": "/static/wux/checkbox/index",
     "wux-cell": "/static/wux/cell/index",

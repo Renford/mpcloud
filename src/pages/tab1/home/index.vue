@@ -25,7 +25,7 @@
         <home-header :plan="plan"></home-header>
       </div>
 
-      <wux-divider text="未收纳"/>
+      <wux-divider text="未装包"/>
       <div v-for="(cate, cateIndex) in plan.todos" :key="cateIndex">
         <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <wux-divider text="已收纳"/>
+      <wux-divider text="已装包"/>
       <div v-for="(cate, cateIndex) in plan.dones" :key="cateIndex">
         <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
@@ -52,9 +52,7 @@
       </div>
 
       <div class="user-container">
-        <wux-image :src="headUrl" shape="circle" width=100rpx height=100rpx>
-          <image src="/static/icon_user.png" slot="loading" />
-        </wux-image>
+        <wux-image :src="headUrl" shape="circle" width=100rpx height=100rpx></wux-image>
         <button class="user-button" open-type="getUserInfo" @getuserinfo="onGetUserInfo"></button>
       </div>
     </div>
@@ -63,7 +61,6 @@
 </template>
 
 <script>
-import EquipmentGroup from '@/components/EquipmentGroup'
 import HomeHeader from '@/components/HomeHeader'
 
 import appUtils from '@/common/utils/AppUtils'
@@ -75,7 +72,7 @@ export default {
   data() {
     return {
       viewStatus: -1, // -1、数据加载中，0、未登录，1、无数据，2、有数据
-      headUrl: appUtils.userInfo.avatarUrl
+      headUrl: '/static/icon_head.png'
     }
   },
 
@@ -100,7 +97,6 @@ export default {
   },
 
   components: {
-    EquipmentGroup,
     HomeHeader
   },
 
@@ -158,6 +154,9 @@ export default {
   onShow() {
     // updateViewStatus(this)
     getCurrentPlan(this)
+    if (Object.keys(appUtils.userInfo).length > 0) {
+      this.headUrl = appUtils.userInfo.avatarUrl
+    }
   }
 }
 

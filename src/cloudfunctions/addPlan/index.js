@@ -23,9 +23,14 @@ exports.main = async (event, context) => {
       return equip.name
     })
 
-    return await db.collection('myplans').add({
-      data: plan
-    })
+    return await db
+      .collection('myplans')
+      .add({
+        data: plan
+      })
+      .then(res => {
+        return res.data
+      })
   } catch (error) {
     console.error('===add plan error:', error)
   }

@@ -3,12 +3,15 @@ import config from './config'
 import appUtils from '@/common/utils/AppUtils'
 
 class Travel {
-  getCategories(ids) {
-    let params = {}
-    if (ids !== undefined) {
-      params = { cateId: ids }
+  getCategories(ids, fields) {
+    let params = {
+      ids: ids,
+      fields: fields
     }
-    return cloud.get('categories', params)
+    return cloud.callFunction('getCates', params).then(res => {
+      console.log('=====getCates', res)
+      return res
+    })
   }
 
   addCategory(cate) {
@@ -22,11 +25,6 @@ class Travel {
     return cloud.callFunction('addEquips', params).then(res => {
       console.log('=====add equips', res)
       return res
-      // if (res.errMsg === 'collection.add:ok') {
-      //   return res.data
-      // } else {
-      //   return Promise.reject(config.ErrorInfo.kAddDataErrorInfo)
-      // }
     })
   }
 
@@ -36,11 +34,6 @@ class Travel {
     }
     return cloud.callFunction('getEquips', params).then(res => {
       return res
-      // if (res.errMsg === 'collection.get:ok') {
-      //   return res.data
-      // } else {
-      //   return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
-      // }
     })
   }
 
@@ -49,12 +42,7 @@ class Travel {
       equip: equip
     }
     return cloud.callFunction('updateEquip', params).then(res => {
-      // return res
-      if (res.errMsg === 'document.set:ok') {
-        return res._id
-      } else {
-        return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
-      }
+      return res
     })
   }
 
@@ -71,11 +59,7 @@ class Travel {
     }
 
     return cloud.callFunction('addPlan', params).then(res => {
-      if (res != null && res.errMsg === 'collection.add:ok') {
-        return res.data
-      } else {
-        return Promise.reject(config.ErrorInfo.kAddDataErrorInfo)
-      }
+      return res
     })
   }
 
@@ -86,11 +70,7 @@ class Travel {
       count: count
     }
     return cloud.callFunction('getPlan', params).then(res => {
-      if (res != null && res.errMsg === 'collection.get:ok') {
-        return res.data
-      } else {
-        return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
-      }
+      return res
     })
   }
 
