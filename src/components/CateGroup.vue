@@ -33,6 +33,12 @@ export default {
     }
   },
 
+  watch: {
+    selectObject(obj) {
+      console.log('====watch: select object', obj)
+    }
+  },
+
   computed: {
     cellType() {
       const equip = this.cate.equips[0]
@@ -52,24 +58,38 @@ export default {
     }
   },
 
-  mounted() {
-    const arr = this.selectObject[this.cate.cateId]
-    console.log('=====mounted', this.cate, this.selectObject, arr)
-    if (arr !== undefined && arr.length > 0) {
-      this.selectValues = arr
-    }
-  },
+  // mounted() {
+  //   const arr = this.selectObject[this.cate.cateId]
+  //   console.log('===cate group==mounted', this.cate, this.selectObject, arr)
+  //   if (arr !== undefined && arr.length > 0) {
+  //     this.selectValues = arr
+  //   }
+  // },
 
-  onShow() {
+  // onShow() {
+  //   const arr = this.selectObject[this.cate.cateId]
+  //   console.log('===cate group==onshow', this.cate, this.selectObject, arr)
+  //   if (arr !== undefined && arr.length > 0) {
+  //     this.selectValues = arr
+  //   }
+  // },
+
+  onLoad() {
+    Object.assign(this.$data, this.$options.data())
     const arr = this.selectObject[this.cate.cateId]
-    console.log('=====onshow', this.cate, this.selectObject, arr)
+    console.log('===cate group==onload', this.cate, this.selectObject, arr)
     if (arr !== undefined && arr.length > 0) {
       this.selectValues = arr
     }
   },
 
   onUnload() {
-    console.log('onUnload=============================================')
+    Object.assign(this.$data, this.$options.data())
+    this.selectValues = []
+  },
+
+  created() {
+    console.log('===cate group==create', this.cate, this.selectObject)
     this.selectValues = []
   }
 }

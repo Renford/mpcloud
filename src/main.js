@@ -57,6 +57,7 @@ Vue.mixin({
   onUnload() {
     if (this.$isPage()) {
       // 退出页面，删除数据
+      console.log('===444444', this.$pageId(), pageDatas)
       delete pageDatas[this.$pageId()]
       this.$needReloadPageData = true
     }

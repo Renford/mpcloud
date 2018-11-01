@@ -72,7 +72,8 @@ export default {
     }
   },
 
-  mounted() {
+  onLoad() {
+    console.log('===select onload 11111', this.selectObject)
     this.cateId = this.$route.query.cateId
     this.viewType = this.$route.query.type
     if (this.viewType === '0') {
@@ -80,7 +81,38 @@ export default {
       updateSelectObject(this)
     }
 
+    console.log('===select onload 22222', this.selectObject)
+
     this.getCategories(this.cateId)
+  },
+
+  // mounted() {
+  //   console.log('===select mounted', this)
+  //   this.cateId = this.$route.query.cateId
+  //   this.viewType = this.$route.query.type
+  //   if (this.viewType === '0') {
+  //     this.plan = JSON.parse(this.$route.query.plan)
+  //     updateSelectObject(this)
+  //   }
+
+  //   this.getCategories(this.cateId)
+  // },
+
+  // onShow() {
+  //   console.log('===select onshow', this)
+  //   this.cateId = this.$route.query.cateId
+  //   this.viewType = this.$route.query.type
+  //   if (this.viewType === '0') {
+  //     this.plan = JSON.parse(this.$route.query.plan)
+  //     updateSelectObject(this)
+  //   }
+
+  //   this.getCategories(this.cateId)
+  // },
+
+  onUnload() {
+    // Object.assign(this.$data, this.$options.data())
+    console.log('===select onUnload', this)
   }
 }
 
