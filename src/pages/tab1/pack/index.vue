@@ -62,7 +62,7 @@ export default {
           content: '所有装备都已装包了嘛？',
           onConfirm(e) {
             todos2dones(obj, type, that)
-            updatePlan(obj, that)
+            updatePlan(that)
           }
         })
       } else {
@@ -70,7 +70,7 @@ export default {
           this.$router.back()
         } else {
           todos2dones(obj, type, that)
-          updatePlan(obj, that)
+          updatePlan(that)
         }
       }
     }
@@ -92,11 +92,12 @@ const isSelectEmpty = obj => {
   return count === 0
 }
 
-const updatePlan = (obj, that) => {
+const updatePlan = that => {
   api.travel
     .updatePlan(that.plan._id, that.plan)
     .then(res => {
-      that.$router.back()
+      // that.$router.back()
+      that.$router.push({ path: '/pages/tab1/home/main', reLaunch: true })
     })
     .catch(err => {
       console.log('===update err ===', err)

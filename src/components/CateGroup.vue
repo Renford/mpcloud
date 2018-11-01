@@ -1,12 +1,12 @@
 <template>
   <div>
-    <wux-checkbox-group :name="cate.cateId" :value="selectIndexs" :title="cate.cateName" @change="onChange">
+    <wux-checkbox-group :name="cate.cateId" :value="selectValues" :title="cate.cateName" @change="onChange">
       <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
         <div v-if="cellType === true">
-          <wux-checkbox color="balanced" :title="equip" :value="equipIndex"/>
+          <wux-checkbox color="balanced" :title="equip" :value="equip"/>
         </div>
         <div v-else>
-          <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equipIndex"/>
+          <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equip.name"/>
         </div>
       </div>
     </wux-checkbox-group>
@@ -19,12 +19,17 @@ export default {
     cate: {
       type: Object,
       default: {}
+    },
+
+    selectObject: {
+      type: Object,
+      default: {}
     }
   },
 
   data() {
     return {
-      selectIndexs: []
+      selectValues: []
     }
   },
 
@@ -37,18 +42,35 @@ export default {
 
   methods: {
     onChange(e) {
-      const index = e.mp.detail.index + ''
-      const array = this.selectIndexs
-      if (array.indexOf(index) === -1) {
-        this.selectIndexs = [...array, index]
+      const value = e.mp.detail.value
+      const array = this.selectValues
+      if (array.indexOf(value) === -1) {
+        this.selectValues = [...array, value]
       } else {
-        this.selectIndexs = array.filter(n => n !== index)
+        this.selectValues = array.filter(val => val !== value)
       }
     }
   },
 
+  mounted() {
+    const arr = this.selectObject[this.cate.cateId]
+    console.log('=====mounted', this.cate, this.selectObject, arr)
+    if (arr !== undefined && arr.length > 0) {
+      this.selectValues = arr
+    }
+  },
+
+  onShow() {
+    const arr = this.selectObject[this.cate.cateId]
+    console.log('=====onshow', this.cate, this.selectObject, arr)
+    if (arr !== undefined && arr.length > 0) {
+      this.selectValues = arr
+    }
+  },
+
   onUnload() {
-    this.selectIndexs = []
+    console.log('onUnload=============================================')
+    this.selectValues = []
   }
 }
 </script>

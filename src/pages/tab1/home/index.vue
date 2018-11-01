@@ -55,6 +55,10 @@
         <wux-image :src="headUrl" shape="circle" width=100rpx height=100rpx></wux-image>
         <button class="user-button" open-type="getUserInfo" @getuserinfo="onGetUserInfo"></button>
       </div>
+
+      <div class="add-container" @click="onAddEquipsEvent">
+        <wux-image src="/static/icon_add.png" shape="circle" width=100rpx height=100rpx></wux-image>
+      </div>
     </div>
    
   </div>
@@ -110,6 +114,18 @@ export default {
     onAddPlanEvent(e) {
       this.$router.push({
         path: '/pages/tab1/category/main'
+      })
+    },
+
+    onAddEquipsEvent(e) {
+      const planStr = JSON.stringify(this.plan)
+      this.$router.push({
+        path: '/pages/tab1/select/main',
+        query: {
+          type: 0,
+          cateId: this.plan.cateId,
+          plan: planStr
+        }
       })
     },
 
@@ -220,7 +236,7 @@ function updateViewStatus(that) {
   bottom: 210rpx;
   width: 100rpx;
   height: 100rpx;
-  background-color: darkgrey;
+  background-color: #7a7a7a;
   border-radius: 50rpx;
 }
 
@@ -233,5 +249,16 @@ function updateViewStatus(that) {
   height: 100rpx;
   border-radius: 50rpx;
   opacity: 0;
+}
+
+.add-container {
+  position: fixed;
+  z-index: 100;
+  right: 30rpx;
+  bottom: 330rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background-color: #7a7a7a;
+  border-radius: 50rpx;
 }
 </style>

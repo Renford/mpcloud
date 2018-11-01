@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "选择装备(2/3)",
+  "navigationBarTitleText": "选择装备",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
     "wux-checkbox-group": "/static/wux/checkbox-group/index",

@@ -9,7 +9,6 @@ class Travel {
       fields: fields
     }
     return cloud.callFunction('getCates', params).then(res => {
-      console.log('=====getCates', res)
       return res
     })
   }

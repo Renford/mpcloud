@@ -25,7 +25,11 @@ Vue.prototype.$isPage = function isPage() {
 }
 
 Vue.prototype.$pageId = function pageId() {
-  return this.$isPage() ? this.$mp.page.__wxWebviewId__ : null
+  if (this.$isPage() && this.$mp.page !== undefined && this.$mp.page !== null) {
+    return this.$mp.page.__wxWebviewId__
+  } else {
+    return null
+  }
 }
 
 // 注入组件

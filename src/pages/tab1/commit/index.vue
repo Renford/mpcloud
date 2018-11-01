@@ -31,6 +31,7 @@ import { $wuxCalendar, $wuxToast } from '../../../../static/wux/index'
 export default {
   data() {
     return {
+      cateId: '',
       equips: [],
       planTitle: '',
       planDate: '',
@@ -79,7 +80,8 @@ export default {
         originating: this.planOrigin,
         destination: this.planDest,
         todos: this.equips,
-        dones: []
+        dones: [],
+        cateId: this.cateId
       }
 
       const that = this
@@ -95,6 +97,7 @@ export default {
   },
 
   mounted() {
+    this.cateId = this.$route.query.cateId
     this.equips = JSON.parse(this.$route.query.equips)
     console.log('======equips', this.equips)
   },
