@@ -2,12 +2,15 @@
   <div>
     <wux-checkbox-group :name="cate.cateId" :value="selectValues" :title="cate.cateName" @change="onChange">
       <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-        <div v-if="cellType === true">
+        
+        <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equip.name"/>
+
+        <!-- <div v-if="cellType === true">
           <wux-checkbox color="balanced" :title="equip" :value="equip"/>
         </div>
         <div v-else>
           <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equip.name"/>
-        </div>
+        </div> -->
       </div>
     </wux-checkbox-group>
   </div>
@@ -39,12 +42,12 @@ export default {
     }
   },
 
-  computed: {
-    cellType() {
-      const equip = this.cate.equips[0]
-      return typeof equip === 'string'
-    }
-  },
+  // computed: {
+  //   cellType() {
+  //     const equip = this.cate.equips[0]
+  //     return typeof equip === 'string'
+  //   }
+  // },
 
   methods: {
     onChange(e) {

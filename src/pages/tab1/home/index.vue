@@ -3,7 +3,6 @@
 
     <div v-if="viewStatus === -1">
       <div class="nodata-container">
-        <wux-prompt :visible="viewStatus === -1" icon='' title="加载中..."/>
       </div>
     </div>
     
@@ -82,6 +81,7 @@ export default {
 
   computed: {
     ...mapState('plan', ['plan']),
+    ...mapState('category', ['cates']),
 
     bottomHeight: {
       get: function() {
@@ -106,6 +106,7 @@ export default {
 
   methods: {
     ...mapActions('plan', ['getCurrentPlan']),
+    ...mapActions('category', ['getCates']),
 
     onLoginEvent(e) {
       getOpenId(this)
@@ -162,17 +163,15 @@ export default {
     }
   },
 
-  mounted() {
-    // updateViewStatus(this)
-    // getCurrentPlan(this)
-  },
-
   onShow() {
-    // updateViewStatus(this)
     getCurrentPlan(this)
     if (Object.keys(appUtils.userInfo).length > 0) {
       this.headUrl = appUtils.userInfo.avatarUrl
     }
+  },
+
+  onShareAppMessage() {
+    return appUtils.getShareObject()
   }
 }
 
@@ -186,6 +185,7 @@ function getCurrentPlan(that) {
   that
     .getCurrentPlan()
     .then(res => {
+      that.getCates()
       updateViewStatus(that)
       if (Object.keys(that.plan).length > 0) {
         wx.setNavigationBarTitle({ title: that.plan.title })

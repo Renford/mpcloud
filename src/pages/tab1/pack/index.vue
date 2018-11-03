@@ -93,13 +93,18 @@ const isSelectEmpty = obj => {
 }
 
 const updatePlan = that => {
+  wx.showLoading({
+    title: '数据更新中...'
+  })
   api.travel
-    .updatePlan(that.plan._id, that.plan)
+    .updatePlan(that.plan)
     .then(res => {
-      // that.$router.back()
-      that.$router.push({ path: '/pages/tab1/home/main', reLaunch: true })
+      wx.hideLoading()
+      that.$router.back()
+      // that.$router.push({ path: '/pages/tab1/home/main', reLaunch: true })
     })
     .catch(err => {
+      wx.hideLoading()
       console.log('===update err ===', err)
     })
 }
@@ -111,26 +116,20 @@ const todos2dones = (obj, type, that) => {
   let dones = []
   let selects = []
 
+  plan.dones.forEach(cate => {
+    const arr = cate.equips.map(equip => {
+      return equip.name
+    })
+    dones = dones.concat(arr)
+  })
+
   plan.todos.forEach(cate => {
     const arr = cate.equips.map(equip => {
       return equip.name
     })
     todos = todos.concat(arr)
 
-    const indexs = obj[cate.cateId]
-    if (indexs.length > 0) {
-      const arr = indexs.map(index => {
-        return cate.equips[parseInt(index)].name
-      })
-      selects = selects.concat(arr)
-    }
-  })
-
-  plan.dones.forEach(cate => {
-    const arr = cate.equips.map(equip => {
-      return equip.name
-    })
-    dones = dones.concat(arr)
+    selects = selects.concat(obj[cate.cateId])
   })
 
   if (type === 1) {

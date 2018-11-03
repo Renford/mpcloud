@@ -1,5 +1,6 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const result = require('./result')
 
 cloud.init()
 const db = cloud.database()
@@ -11,27 +12,33 @@ exports.main = async (event, context) => {
   plan['_openid'] = event.userInfo.openId
 
   try {
-    cloud.callFunction({
+    const res = await cloud.callFunction({
       name: 'addEquips',
       data: {
+        type: 1,
         equips: equips,
         openId: event.userInfo.openId
       }
     })
 
-    plan.todos = equips.map(equip => {
-      return equip.name
-    })
+    console.log('====add my equips result：', res)
 
-    return await db
-      .collection('myplans')
-      .add({
+    if (res.result.code === 0) {
+      plan.todos = equips.map(equip => {
+        return equip.name
+      })
+
+      const res = await db.collection('myplans').add({
         data: plan
       })
-      .then(res => {
-        return res.data
-      })
+
+      console.log('====add plan result：', result)
+
+      return result.successResult(res)
+    } else {
+      return result.formateResult(1, res.result.msg)
+    }
   } catch (error) {
-    console.error('===add plan error:', error)
+    return result.errorResult(error)
   }
 }

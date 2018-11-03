@@ -10,6 +10,8 @@ class AppUtils {
   bottomHeight = 48
   cates = []
 
+  _baseCateIds = []
+
   saveOpenId(openId) {
     this.openId = openId
     wx.setStorage({
@@ -78,18 +80,31 @@ class AppUtils {
     const that = this
     return wx.cloud
       .callFunction({
-        name: 'login',
-        data: {}
+        name: 'login'
       })
       .then(res => {
         console.log('=====get openid: ', res)
-        if (res.errMsg === 'cloud.callFunction:ok') {
-          that.saveOpenId(res.result.openid)
+        if (res.errMsg === 'cloud.callFunction:ok' && res.result.code === 0) {
+          that.saveOpenId(res.result.detail.openId)
         }
       })
       .catch(err => {
         console.log('===get openid: ', err)
       })
+  }
+
+  getBaseCateIds() {
+    if (this._baseCateIds.length === 0) {
+      this._baseCateIds = this.cates
+        .filter(cate => {
+          return cate.cateType === '0'
+        })
+        .map(cate => {
+          return cate.cateId
+        })
+    }
+
+    return this._baseCateIds
   }
 
   // launchApp(that) {

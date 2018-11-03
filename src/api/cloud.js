@@ -78,7 +78,11 @@ class Cloud {
       .then(res => {
         console.log('=====call faction', res)
         if (res.errMsg === 'cloud.callFunction:ok') {
-          return res.result
+          if (res.result.code === 0) {
+            return res.result.detail
+          } else {
+            return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
+          }
         } else {
           return Promise.reject(config.ErrorInfo.kGetDataErrorInfo)
         }

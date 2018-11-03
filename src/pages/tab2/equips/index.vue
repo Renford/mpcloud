@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div v-for="(cate, cateIndex) in equips" :key="cateIndex">
+    <div v-for="(cate, cateIndex) in sections" :key="cateIndex">
       <wux-cell-group :title="cate.cateName">
         <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
           <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
@@ -30,13 +30,34 @@ export default {
   },
 
   computed: {
-    ...mapState('equip', ['equips'])
+    ...mapState('equip', ['equips']),
+
+    sections: {
+      get: function() {
+        const obj = {}
+        this.equips.forEach(equip => {
+          if (obj[equip.cateId] === undefined) {
+            obj[equip.cateId] = [equip]
+          } else {
+            obj[equip.cateId] = [...obj[equip.cateId], equip]
+          }
+        })
+
+        return Object.keys(obj).map(id => {
+          return {
+            cateId: id,
+            cateName: obj[id][0].cateName,
+            equips: obj[id]
+          }
+        })
+      }
+    }
   },
 
   components: {},
 
   methods: {
-    ...mapActions('equip', ['getEquips', 'addEquips']),
+    ...mapActions('equip', ['getMyEquips', 'addMyEquips']),
 
     onItemEvent(equip) {
       const equipStr = JSON.stringify(equip)
@@ -52,7 +73,7 @@ export default {
       console.log('===onConfirm', e)
       const name = e.mp.detail.value
       const index = parseInt(e.mp.target.id)
-      const cate = this.equips[index]
+      const cate = this.sections[index]
       const equip = {
         name: name,
         number: 1,
@@ -62,8 +83,8 @@ export default {
         cateName: cate.cateName
       }
 
-      store.dispatch('equip/addEquips', [equip]).then(res => {
-        store.dispatch('equip/getEquips')
+      store.dispatch('equip/addMyEquips', [equip]).then(res => {
+        store.dispatch('equip/getMyEquips')
       })
     }
 
@@ -74,9 +95,11 @@ export default {
     // }
   },
 
-  mounted() {
-    this.getEquips()
-  }
+  onShow() {
+    this.getMyEquips()
+  },
+
+  mounted() {}
 }
 </script>
 

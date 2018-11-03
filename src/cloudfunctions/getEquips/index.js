@@ -1,68 +1,41 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const result = require('./result')
 
 cloud.init()
 
 const db = cloud.database()
 const _ = db.command
 
-// 云函数入口函数
+// type: 0、共有装备，1、我的装备
 exports.main = async (event, context) => {
+  const type = event.type
   const count = event.count
   const openId = event.userInfo.openId
 
+  const ids = event.ids.length > 0 ? _.in(event.ids) : _.nin(event.ids)
+
   try {
-    const result = await db
-      .collection('myequips')
-      .where({
-        _openid: openId
-      })
-      .limit(count)
-      .get()
-    return arr2section(result.data)
-  } catch (error) {
-    console.error('===add plan error:', error)
-  }
-}
-
-const cateIds = [
-  'luying',
-  'dengshan',
-  'tubu',
-  'sheying',
-  'qixing',
-  'shatan',
-  'huaxue',
-  'youyong',
-  'dianzi',
-  'xishu',
-  'yiwu'
-]
-
-// [equip] => [{cateId:'', equips: [equip]}]
-const arr2section = equips => {
-  const obj = {}
-  const cateObj = {}
-  equips.forEach(equip => {
-    const arr = obj[equip.cateId]
-    if (arr === undefined) {
-      obj[equip.cateId] = [equip]
-      cateObj[equip.cateId] = equip.cateName
+    if (type === 0) {
+      const res = await db
+        .collection('equips')
+        .where({
+          cateId: ids
+        })
+        .limit(count)
+        .get()
+      return result.successResult(res)
     } else {
-      obj[equip.cateId] = [...arr, equip]
+      const res = await db
+        .collection('myequips')
+        .where({
+          _openid: openId
+        })
+        .limit(count)
+        .get()
+      return result.successResult(res)
     }
-  })
-
-  const result = []
-  cateIds.forEach(id => {
-    const equips = obj[id]
-    if (equips !== undefined) {
-      result.push({
-        cateId: id,
-        cateName: cateObj[id],
-        equips: equips
-      })
-    }
-  })
-  return result
+  } catch (error) {
+    return result.errorResult(error)
+  }
 }

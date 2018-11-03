@@ -90,7 +90,7 @@ export default {
       } else {
         const that = this
         api.travel
-          .updateEquip(this.equip)
+          .updateEquip(0, this.equip)
           .then(res => {
             that.$router.back()
           })

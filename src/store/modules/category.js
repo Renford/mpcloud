@@ -18,9 +18,9 @@ const mutations = {
 const actions = {
   getCates({ commit, state }) {
     const ids = []
-    const fields = ['_id', 'cateId', 'cateName', 'iconUrl']
+    // const fields = ['_id', 'cateId', 'cateName', 'iconUrl']
     return api.travel
-      .getCategories(ids, fields)
+      .getCategories(ids)
       .then(res => {
         commit('setCates', res)
         appUtils.saveCates(res)
@@ -33,7 +33,7 @@ const actions = {
   getCategories({ commit, state }, id) {
     const ids = [id, 'yiwu', 'dianzi', 'xishu']
     return api.travel
-      .getCategories(ids, [])
+      .getCategories(ids)
       .then(res => {
         commit('setCategories', res)
       })

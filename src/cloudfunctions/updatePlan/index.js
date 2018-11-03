@@ -1,5 +1,6 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const result = require('./result')
 
 cloud.init()
 
@@ -13,16 +14,14 @@ exports.main = async (event, context) => {
   delete plan._id
 
   try {
-    return await db
+    const res = await db
       .collection('myplans')
       .doc(planId)
       .set({
         data: plan
       })
-      .then(res => {
-        return res.data
-      })
-  } catch (e) {
-    console.error('===update my plans: ', e)
+    return result.successResult(res)
+  } catch (error) {
+    return result.errorResult(error)
   }
 }

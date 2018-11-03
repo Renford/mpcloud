@@ -1,5 +1,6 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const result = require('./result')
 
 cloud.init()
 
@@ -22,7 +23,7 @@ exports.main = async (event, context) => {
       .limit(count)
       .get()
 
-    if (res.data !== undefined) {
+    if (res.errMsg === 'collection.get:ok' && res.data.length > 0) {
       for (let i = 0; i < res.data.length; i++) {
         const plan = res.data[i]
 
@@ -33,7 +34,9 @@ exports.main = async (event, context) => {
             name: _.in(plan.todos)
           })
           .get()
+        console.log('result======before', result)
         plan.todos = arr2section(result.data)
+        console.log('result======after', plan.todos)
 
         if (plan.dones.length > 0) {
           const result = await db
@@ -54,9 +57,9 @@ exports.main = async (event, context) => {
       }
     }
 
-    return res.data
+    return result.successResult(res)
   } catch (error) {
-    console.error('===add plan error:', error)
+    return result.errorResult(error)
   }
 }
 
@@ -73,21 +76,6 @@ const handleCates = async (names, openId) => {
   return arr2section(result.data)
 }
 
-// 确定数据返回顺序
-const cateIds = [
-  'luying',
-  'dengshan',
-  'tubu',
-  'sheying',
-  'qixing',
-  'shatan',
-  'huaxue',
-  'youyong',
-  'dianzi',
-  'xishu',
-  'yiwu'
-]
-
 // [equip] => [{cateId:'', equips: [equip]}]
 const arr2section = equips => {
   const obj = {}
@@ -102,16 +90,11 @@ const arr2section = equips => {
     }
   })
 
-  const result = []
-  cateIds.forEach(id => {
-    const equips = obj[id]
-    if (equips !== undefined) {
-      result.push({
-        cateId: id,
-        cateName: cateObj[id],
-        equips: equips
-      })
+  return Object.keys(obj).map(id => {
+    return {
+      cateId: id,
+      cateName: cateObj[id],
+      equips: obj[id]
     }
   })
-  return result
 }

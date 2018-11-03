@@ -1,12 +1,10 @@
 import cloud from './cloud'
 import config from './config'
-import appUtils from '@/common/utils/AppUtils'
 
 class Travel {
-  getCategories(ids, fields) {
+  getCategories(ids) {
     let params = {
-      ids: ids,
-      fields: fields
+      ids: ids
     }
     return cloud.callFunction('getCates', params).then(res => {
       return res
@@ -17,8 +15,9 @@ class Travel {
     return cloud.add('categories', cate)
   }
 
-  addEquips(equips) {
+  addEquips(type, equips) {
     const params = {
+      type: type,
       equips: equips
     }
     return cloud.callFunction('addEquips', params).then(res => {
@@ -27,17 +26,21 @@ class Travel {
     })
   }
 
-  getEquips() {
+  getEquips(type, ids) {
     const params = {
-      count: config.pageSize
+      type: type,
+      count: config.pageSize,
+      ids: ids
     }
     return cloud.callFunction('getEquips', params).then(res => {
       return res
     })
   }
 
-  updateEquip(equip) {
+  // type: 0, 我的装备，1、通用装备
+  updateEquip(type, equip) {
     const params = {
+      type: type,
       equip: equip
     }
     return cloud.callFunction('updateEquip', params).then(res => {
@@ -73,10 +76,11 @@ class Travel {
     })
   }
 
-  updatePlan(planId, plan) {
-    delete plan._id
-    delete plan._openid
-    return cloud.set('myplans', planId, plan)
+  updatePlan(plan) {
+    const params = {
+      plan: plan
+    }
+    return cloud.callFunction('updatePlan', params)
   }
 }
 

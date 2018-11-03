@@ -1,11 +1,11 @@
 <template>
   <div>
     <form @submit="onFormSubmit">
-      <div v-for="(cate, cateIndex) in categories" :key="cateIndex">
+      <div v-for="(cate, cateIndex) in sections" :key="cateIndex">
         <cate-group :cate="cate" :selectObject="selectObject"></cate-group>
       </div>
       
-      <div class="bottom-button-container" v-if="categories.length > 0">
+      <div class="bottom-button-container" v-if="equips.length > 0">
         <button class="form-button" formType="submit">{{nextButtonTitle}}</button>
       </div>
     </form>
@@ -16,6 +16,7 @@
 import CateGroup from '@/components/CateGroup'
 
 import api from '@/api/api'
+import appUtils from '@/common/utils/AppUtils'
 
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -33,7 +34,39 @@ export default {
   },
 
   computed: {
-    ...mapState('category', ['categories'])
+    ...mapState('equip', ['equips']),
+
+    sections: {
+      get: function() {
+        // 为了规避二次进入选中装备错误，暂时屏蔽已添加的装备
+        let filters = []
+        if (this.viewType === '0') {
+          // const cates = this.plan.todos.concat(this.plan.dones)
+          const cates = this.plan.dones
+          cates.forEach(cate => {
+            const names = cate.equips.map(equip => {
+              return equip.name
+            })
+            filters = [...filters, ...names]
+          })
+        }
+
+        const obj = {}
+        this.equips
+          .filter(equip => {
+            return filters.indexOf(equip.name) === -1
+          })
+          .forEach(equip => {
+            if (obj[equip.cateId] === undefined) {
+              obj[equip.cateId] = [equip]
+            } else {
+              obj[equip.cateId] = [...obj[equip.cateId], equip]
+            }
+          })
+
+        return getShowOrder(obj, this)
+      }
+    }
   },
 
   watch: {
@@ -53,13 +86,14 @@ export default {
   },
 
   methods: {
-    ...mapActions('category', ['getCategories']),
+    ...mapActions('equip', ['getEquips']),
 
     onFormSubmit(e) {
       const array = obj2Array(e.mp.detail.value, this)
+      console.log('======onFormSubmit', array)
       if (this.viewType === '0') {
-        handlePlan(e.mp.detail.value, this)
-        updatePlan(this)
+        const plan = getRequestPlan(e.mp.detail.value, this.plan)
+        updatePlan(array, plan, this)
       } else if (this.viewType === '1') {
         this.$router.push({
           path: '/pages/tab1/commit/main',
@@ -73,7 +107,6 @@ export default {
   },
 
   onLoad() {
-    console.log('===select onload 11111', this.selectObject)
     this.cateId = this.$route.query.cateId
     this.viewType = this.$route.query.type
     if (this.viewType === '0') {
@@ -81,9 +114,7 @@ export default {
       updateSelectObject(this)
     }
 
-    console.log('===select onload 22222', this.selectObject)
-
-    this.getCategories(this.cateId)
+    this.getEquips(this.cateId)
   },
 
   // mounted() {
@@ -126,6 +157,7 @@ const updateSelectObject = that => {
     if (typeof cate === 'string') {
       return cate
     }
+
     const equips = cate.equips.map(equip => {
       return equip.name
     })
@@ -136,10 +168,16 @@ const updateSelectObject = that => {
     if (typeof cate === 'string') {
       return cate
     }
+
     const equips = cate.equips.map(equip => {
       return equip.name
     })
-    obj[cate.cateId] = obj[cate.cateId].concat(equips)
+
+    let arr = []
+    if (obj[cate.cateId] !== undefined) {
+      arr = obj[cate.cateId]
+    }
+    obj[cate.cateId] = arr.concat(equips)
   })
 
   that.selectObject = obj
@@ -147,7 +185,7 @@ const updateSelectObject = that => {
 
 const obj2Array = (obj, that) => {
   let equips = []
-  that.categories.forEach(cate => {
+  that.sections.forEach(cate => {
     const names = obj[cate.cateId]
     names.forEach(name => {
       equips.push({
@@ -164,9 +202,7 @@ const obj2Array = (obj, that) => {
   return equips
 }
 
-const handlePlan = (obj, that) => {
-  const plan = that.plan
-
+const getRequestPlan = (obj, plan) => {
   let todos = []
   let dones = []
 
@@ -179,28 +215,66 @@ const handlePlan = (obj, that) => {
 
   Object.values(obj).forEach(arr => {
     arr.forEach(val => {
-      if (dones.indexOf(val) === -1) {
-        todos.push(val)
-      }
+      todos.push(val)
     })
   })
 
-  plan.todos = todos
-  plan.dones = dones
+  const tempPlan = JSON.parse(JSON.stringify(plan))
+  tempPlan.todos = todos
+  tempPlan.dones = dones
 
-  that.plan = plan
+  return tempPlan
 }
 
-const updatePlan = that => {
+const updatePlan = async (equips, plan, that) => {
+  wx.showLoading({
+    title: '数据更新中...'
+  })
+
+  const res = await api.travel.addEquips(1, equips)
+  console.log('=====update plan', res, equips)
   api.travel
-    .updatePlan(that.plan._id, that.plan)
+    .updatePlan(plan)
     .then(res => {
+      wx.hideLoading()
       that.$router.back()
       // that.$router.push({ path: '/pages/tab1/home/main', reLaunch: true })
     })
     .catch(err => {
+      wx.hideLoading()
       console.log('===update err ===', err)
     })
+}
+
+const getShowOrder = (obj, that) => {
+  if (Object.keys(obj).length === 0) {
+    return []
+  }
+  console.log('=========res=======', obj, that.equips)
+  // const first = {
+  //   cateId: that.cateId,
+  //   cateName: obj[that.cateId][0].cateName,
+  //   equips: obj[that.cateId]
+  // }
+  // const last = {
+  //   cateId: 'qita',
+  //   cateName: obj['qita'][0].cateName,
+  //   equips: obj['qita']
+  // }
+  // delete obj[that.cateId]
+  // delete obj['qita']
+
+  const others = Object.keys(obj).map(id => {
+    return {
+      cateId: id,
+      cateName: obj[id][0].cateName,
+      equips: obj[id]
+    }
+  })
+
+  return others
+
+  // return [first, ...others, last]
 }
 </script>
 
