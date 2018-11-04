@@ -115,7 +115,7 @@ const cates = [
   },
   {
     cateId: 'dianzi',
-    cateName: '电子',
+    cateName: '电子设备',
     cateType: '0',
     equips: [
       '手机',
@@ -130,7 +130,7 @@ const cates = [
   },
   {
     cateId: 'xishu',
-    cateName: '洗漱',
+    cateName: '洗漱用品',
     cateType: '0',
     equips: [
       '牙刷',
@@ -167,7 +167,7 @@ const cates = [
   },
   {
     cateId: 'siwu',
-    cateName: '食物',
+    cateName: '常用食物',
     cateType: '0',
     equips: [
       '士力架',

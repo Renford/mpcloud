@@ -88,13 +88,18 @@ export default {
           text: '装备名称不能为空!'
         })
       } else {
+        wx.showLoading({
+          title: '数据更新中...'
+        })
         const that = this
         api.travel
           .updateEquip(0, this.equip)
           .then(res => {
+            wx.hideLoading()
             that.$router.back()
           })
           .catch(err => {
+            wx.hideLoading()
             $wuxToast().error({
               type: 'text',
               text: err.message
@@ -106,7 +111,7 @@ export default {
 
   mounted() {
     this.equip = JSON.parse(this.$route.query.equip)
-    console.log('===equip:', this.equip)
+    console.log('===equips:', this.equip)
 
     const that = this
     if (appUtils.cates.length === 0) {

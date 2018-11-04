@@ -2,15 +2,7 @@
   <div>
     <wux-checkbox-group :name="cate.cateId" :value="selectValues" :title="cate.cateName" @change="onChange">
       <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
-        
         <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equip.name"/>
-
-        <!-- <div v-if="cellType === true">
-          <wux-checkbox color="balanced" :title="equip" :value="equip"/>
-        </div>
-        <div v-else>
-          <wux-checkbox color="balanced" :title="equip.name" :label="equip.remark" :value="equip.name"/>
-        </div> -->
       </div>
     </wux-checkbox-group>
   </div>
@@ -38,16 +30,14 @@ export default {
 
   watch: {
     selectObject(obj) {
-      console.log('====watch: select object', obj)
+      console.log('===cate group==22222: selectObject')
+      let arr = this.selectObject[this.cate.cateId]
+      if (arr === undefined) {
+        arr = []
+      }
+      this.selectValues = arr
     }
   },
-
-  // computed: {
-  //   cellType() {
-  //     const equip = this.cate.equips[0]
-  //     return typeof equip === 'string'
-  //   }
-  // },
 
   methods: {
     onChange(e) {
@@ -70,6 +60,7 @@ export default {
   // },
 
   // onShow() {
+  //   this.selectValues = []
   //   const arr = this.selectObject[this.cate.cateId]
   //   console.log('===cate group==onshow', this.cate, this.selectObject, arr)
   //   if (arr !== undefined && arr.length > 0) {
@@ -78,9 +69,10 @@ export default {
   // },
 
   onLoad() {
+    console.log('===cate group==111111: onLoad')
     Object.assign(this.$data, this.$options.data())
     const arr = this.selectObject[this.cate.cateId]
-    console.log('===cate group==onload', this.cate, this.selectObject, arr)
+    console.log('===cate group==onload', arr)
     if (arr !== undefined && arr.length > 0) {
       this.selectValues = arr
     }
@@ -88,11 +80,6 @@ export default {
 
   onUnload() {
     Object.assign(this.$data, this.$options.data())
-    this.selectValues = []
-  },
-
-  created() {
-    console.log('===cate group==create', this.cate, this.selectObject)
     this.selectValues = []
   }
 }

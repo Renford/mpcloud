@@ -85,12 +85,17 @@ export default {
       }
 
       const that = this
+      wx.showLoading({
+        title: '数据提交中...'
+      })
       api.travel
         .addPlan(plan)
         .then(res => {
+          wx.hideLoading()
           that.$router.push({ path: '/pages/tab1/home/main', reLaunch: true })
         })
         .catch(err => {
+          wx.hideLoading()
           console.log('add plan error', err)
         })
     }
@@ -99,7 +104,7 @@ export default {
   mounted() {
     this.cateId = this.$route.query.cateId
     this.equips = JSON.parse(this.$route.query.equips)
-    console.log('======equips', this.equips)
+    console.log('===equips', this.equips)
   },
 
   created() {}

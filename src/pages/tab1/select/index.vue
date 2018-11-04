@@ -250,7 +250,7 @@ const getShowOrder = (obj, that) => {
   if (Object.keys(obj).length === 0) {
     return []
   }
-  console.log('=========res=======', obj, that.equips)
+  // console.log('=========res=======', obj, that.equips)
   // const first = {
   //   cateId: that.cateId,
   //   cateName: obj[that.cateId][0].cateName,

@@ -54,10 +54,11 @@ Vue.mixin({
     }
   },
 
+  // 这里有一个bug，当调用 relauch 的时候，pageId没有，pageData无法删除
   onUnload() {
     if (this.$isPage()) {
       // 退出页面，删除数据
-      console.log('===444444', this.$pageId(), pageDatas)
+      console.log('===onUnload delete date: ', this.$pageId(), pageDatas)
       delete pageDatas[this.$pageId()]
       this.$needReloadPageData = true
     }
