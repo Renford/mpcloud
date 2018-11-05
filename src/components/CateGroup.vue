@@ -30,7 +30,6 @@ export default {
 
   watch: {
     selectObject(obj) {
-      console.log('===cate group==22222: selectObject')
       let arr = this.selectObject[this.cate.cateId]
       if (arr === undefined) {
         arr = []
@@ -51,28 +50,9 @@ export default {
     }
   },
 
-  // mounted() {
-  //   const arr = this.selectObject[this.cate.cateId]
-  //   console.log('===cate group==mounted', this.cate, this.selectObject, arr)
-  //   if (arr !== undefined && arr.length > 0) {
-  //     this.selectValues = arr
-  //   }
-  // },
-
-  // onShow() {
-  //   this.selectValues = []
-  //   const arr = this.selectObject[this.cate.cateId]
-  //   console.log('===cate group==onshow', this.cate, this.selectObject, arr)
-  //   if (arr !== undefined && arr.length > 0) {
-  //     this.selectValues = arr
-  //   }
-  // },
-
   onLoad() {
-    console.log('===cate group==111111: onLoad')
     Object.assign(this.$data, this.$options.data())
     const arr = this.selectObject[this.cate.cateId]
-    console.log('===cate group==onload', arr)
     if (arr !== undefined && arr.length > 0) {
       this.selectValues = arr
     }

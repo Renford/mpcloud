@@ -23,7 +23,6 @@ const actions = {
       .getEquips(0, ids)
       .then(res => {
         wx.hideLoading()
-        console.log('====get equips', res)
         commit('setEquips', res)
       })
       .catch(err => {

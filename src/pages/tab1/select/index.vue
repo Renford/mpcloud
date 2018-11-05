@@ -117,33 +117,8 @@ export default {
     this.getEquips(this.cateId)
   },
 
-  // mounted() {
-  //   console.log('===select mounted', this)
-  //   this.cateId = this.$route.query.cateId
-  //   this.viewType = this.$route.query.type
-  //   if (this.viewType === '0') {
-  //     this.plan = JSON.parse(this.$route.query.plan)
-  //     updateSelectObject(this)
-  //   }
-
-  //   this.getCategories(this.cateId)
-  // },
-
-  // onShow() {
-  //   console.log('===select onshow', this)
-  //   this.cateId = this.$route.query.cateId
-  //   this.viewType = this.$route.query.type
-  //   if (this.viewType === '0') {
-  //     this.plan = JSON.parse(this.$route.query.plan)
-  //     updateSelectObject(this)
-  //   }
-
-  //   this.getCategories(this.cateId)
-  // },
-
   onUnload() {
-    // Object.assign(this.$data, this.$options.data())
-    console.log('===select onUnload', this)
+    store.commit('equip/setEquips', [])
   }
 }
 
@@ -250,19 +225,19 @@ const getShowOrder = (obj, that) => {
   if (Object.keys(obj).length === 0) {
     return []
   }
-  // console.log('=========res=======', obj, that.equips)
-  // const first = {
-  //   cateId: that.cateId,
-  //   cateName: obj[that.cateId][0].cateName,
-  //   equips: obj[that.cateId]
-  // }
-  // const last = {
-  //   cateId: 'qita',
-  //   cateName: obj['qita'][0].cateName,
-  //   equips: obj['qita']
-  // }
-  // delete obj[that.cateId]
-  // delete obj['qita']
+
+  const first = {
+    cateId: that.cateId,
+    cateName: obj[that.cateId][0].cateName,
+    equips: obj[that.cateId]
+  }
+  const last = {
+    cateId: 'qita',
+    cateName: obj['qita'][0].cateName,
+    equips: obj['qita']
+  }
+  delete obj[that.cateId]
+  delete obj['qita']
 
   const others = Object.keys(obj).map(id => {
     return {
@@ -272,9 +247,7 @@ const getShowOrder = (obj, that) => {
     }
   })
 
-  return others
-
-  // return [first, ...others, last]
+  return [first, ...others, last]
 }
 </script>
 

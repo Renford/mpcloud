@@ -18,7 +18,6 @@ const mutations = {
 const actions = {
   getCates({ commit, state }) {
     const ids = []
-    // const fields = ['_id', 'cateId', 'cateName', 'iconUrl']
     return api.travel
       .getCategories(ids)
       .then(res => {

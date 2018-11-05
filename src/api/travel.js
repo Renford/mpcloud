@@ -21,7 +21,6 @@ class Travel {
       equips: equips
     }
     return cloud.callFunction('addEquips', params).then(res => {
-      console.log('=====add equips', res)
       return res
     })
   }
