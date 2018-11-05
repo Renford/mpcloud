@@ -40,9 +40,7 @@ export default {
 
   mounted() {
     const that = this
-    this.getPlans().then(res => {
-      console.log('plans====', that.plans)
-    })
+    this.getPlans()
   },
 
   created() {}
