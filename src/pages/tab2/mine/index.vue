@@ -7,7 +7,7 @@
     </div>
 
     <wux-cell-group>
-      <wux-cell title="我的计划" is-link url="/pages/tab2/plans/main"></wux-cell>
+      <wux-cell title="我的规划" is-link url="/pages/tab2/plans/main"></wux-cell>
       <wux-cell title="我的装备" is-link url="/pages/tab2/equips/main"></wux-cell>
     </wux-cell-group>
 

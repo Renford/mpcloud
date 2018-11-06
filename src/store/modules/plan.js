@@ -2,8 +2,8 @@ import api from '@/api/api'
 import config from '@/api/config'
 
 const state = {
-  plan: {}, // 下一个未完成计划
-  plans: [] // 所有计划
+  plan: {}, // 下一个未完成规划
+  plans: [] // 所有规划
 }
 
 const mutations = {

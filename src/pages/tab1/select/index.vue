@@ -24,7 +24,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      viewType: '', // 0、添加，1、创建
+      viewType: '', // 1、创建——选择，2、创建——选择我的装备，3、添加——选择，4、添加——选择我的装备
       cateId: '',
       nextButtonTitle: '确定',
 
@@ -40,7 +40,7 @@ export default {
       get: function() {
         // 为了规避二次进入选中装备错误，暂时屏蔽已添加的装备
         let filters = []
-        if (this.viewType === '0') {
+        if (this.viewType === '3' || this.viewType === '4') {
           // const cates = this.plan.todos.concat(this.plan.dones)
           const cates = this.plan.dones
           cates.forEach(cate => {
@@ -71,10 +71,10 @@ export default {
 
   watch: {
     viewType(type) {
-      if (type === '0') {
+      if (type === '3' || type === '4') {
         wx.setNavigationBarTitle({ title: '选择装备' })
         this.nextButtonTitle = '确定'
-      } else if (type === '1') {
+      } else if (type === '1' || type === '2') {
         wx.setNavigationBarTitle({ title: '选择装备(2/3)' })
         this.nextButtonTitle = '下一步'
       }
@@ -86,15 +86,15 @@ export default {
   },
 
   methods: {
-    ...mapActions('equip', ['getEquips']),
+    ...mapActions('equip', ['getEquips', 'getMyEquips']),
 
     onFormSubmit(e) {
       const array = obj2Array(e.mp.detail.value, this)
       console.log('======onFormSubmit', array)
-      if (this.viewType === '0') {
+      if (this.viewType === '3' || this.viewType === '4') {
         const plan = getRequestPlan(e.mp.detail.value, this.plan)
         updatePlan(array, plan, this)
-      } else if (this.viewType === '1') {
+      } else if (this.viewType === '1' || this.viewType === '2') {
         this.$router.push({
           path: '/pages/tab1/commit/main',
           query: {
@@ -109,12 +109,16 @@ export default {
   onLoad() {
     this.cateId = this.$route.query.cateId
     this.viewType = this.$route.query.type
-    if (this.viewType === '0') {
+    if (this.viewType === '3' || this.viewType === '4') {
       this.plan = JSON.parse(this.$route.query.plan)
       updateSelectObject(this)
     }
 
-    this.getEquips(this.cateId)
+    if (this.viewType === '2' || this.viewType === '4') {
+      this.getMyEquips()
+    } else {
+      this.getEquips(this.cateId)
+    }
   },
 
   onUnload() {
@@ -207,7 +211,6 @@ const updatePlan = async (equips, plan, that) => {
   })
 
   const res = await api.travel.addEquips(1, equips)
-  console.log('=====update plan', res, equips)
   api.travel
     .updatePlan(plan)
     .then(res => {
@@ -224,6 +227,18 @@ const updatePlan = async (equips, plan, that) => {
 const getShowOrder = (obj, that) => {
   if (Object.keys(obj).length === 0) {
     return []
+  }
+
+  console.log('====on show order', that)
+
+  if (that.viewType === '2' || that.viewType === '4') {
+    return Object.keys(obj).map(id => {
+      return {
+        cateId: id,
+        cateName: obj[id][0].cateName,
+        equips: obj[id]
+      }
+    })
   }
 
   const first = {

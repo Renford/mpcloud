@@ -64,7 +64,7 @@ class Travel {
     })
   }
 
-  // status: 状态数组，0、未开始，1、进行中，2、已完成
+  // status: 状态，0、未开始，1、进行中，2、已完成
   getPlans(status, count) {
     const params = {
       status: status,

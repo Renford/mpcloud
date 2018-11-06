@@ -20,6 +20,8 @@ exports.main = async (event, context) => {
         _openid: openId,
         status: _.in(status)
       })
+      .orderBy('status', 'asc')
+      .orderBy('date', 'asc')
       .limit(count)
       .get()
 
@@ -34,9 +36,7 @@ exports.main = async (event, context) => {
             name: _.in(plan.todos)
           })
           .get()
-        console.log('result======before', result)
         plan.todos = arr2section(result.data)
-        console.log('result======after', plan.todos)
 
         if (plan.dones.length > 0) {
           const result = await db

@@ -5,6 +5,11 @@
         <wux-grid :thumb="item.iconUrl" :label="item.cateName" @click="onItemTapEvent(item)"/>
       </div>
     </wux-grids>
+    
+    <div class="bottom-button-container">
+      <wux-button block type="balanced" @click="onBottomEvent">从我的装备选择</wux-button>
+    </div>
+
   </div>
 </template>
 
@@ -44,6 +49,15 @@ export default {
         query: {
           cateId: item.cateId,
           type: 1
+        }
+      })
+    },
+
+    onBottomEvent() {
+      this.$router.push({
+        path: '/pages/tab1/select/main',
+        query: {
+          type: 2
         }
       })
     }

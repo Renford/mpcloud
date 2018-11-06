@@ -14,7 +14,7 @@
 
     <div v-else-if="viewStatus === 1">
       <div class="nodata-container">
-        <wux-prompt :visible="viewStatus === 1" title="暂无计划，点击添加" @click="onAddPlanEvent" />
+        <wux-prompt :visible="viewStatus === 1" title="暂无规划，点击添加" @click="onAddPlanEvent" />
       </div>
     </div>
 
@@ -119,11 +119,17 @@ export default {
     },
 
     onAddEquipsEvent(e) {
+      console.log(
+        '=====onAddEquipsEvent',
+        this.plan,
+        this.plan.cateId.length === 0
+      )
+      const type = this.plan.cateId.length === 0 ? 4 : 3
       const planStr = JSON.stringify(this.plan)
       this.$router.push({
         path: '/pages/tab1/select/main',
         query: {
-          type: 0,
+          type: type,
           cateId: this.plan.cateId,
           plan: planStr
         }

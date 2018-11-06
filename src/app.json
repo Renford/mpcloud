@@ -10,6 +10,9 @@
     "pages/tab2/equips/main",
     "pages/tab2/equipedit/main",
     "pages/tab2/plans/main",
+    "pages/tab2/temps/main",
+    "pages/tab2/tempdetail/main",
+    "pages/tab2/plandetail/main",
     "pages/tab2/index/main"
   ],
   "window": {

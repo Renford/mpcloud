@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "完善计划(3/3)",
+  "navigationBarTitleText": "完善规划(3/3)",
   "usingComponents": {
     "wux-cell": "/static/wux/cell/index",
     "wux-cell-group": "/static/wux/cell-group/index",
