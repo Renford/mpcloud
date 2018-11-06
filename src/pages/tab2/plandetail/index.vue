@@ -42,8 +42,8 @@ export default {
               if (obj[item.cateId] === undefined) {
                 obj[item.cateId] = item.equips
               } else {
-                const equips = obj[item.cateId].equips
-                obj[item.cateId].equips = [...equips, ...item.equips]
+                const equips = obj[item.cateId]
+                obj[item.cateId] = [...equips, ...item.equips]
               }
             }
           })
