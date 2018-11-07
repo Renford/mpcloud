@@ -1,10 +1,12 @@
 <script>
 import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 export default {
   created() {
-    appUtils.loadStorage()
     appUtils.getSystemInfo()
+    appUtils.loadStorage()
+    cateUtils.loadStorage()
   },
 
   onLaunch() {

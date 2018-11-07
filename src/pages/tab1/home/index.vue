@@ -25,7 +25,7 @@
       </div>
 
       <wux-divider text="未装包"/>
-      <div v-for="(cate, cateIndex) in plan.todos" :key="cateIndex">
+      <div v-for="(cate, cateIndex) in cateTodos" :key="cateIndex">
         <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
             <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
@@ -36,7 +36,7 @@
       </div>
 
       <wux-divider text="已装包"/>
-      <div v-for="(cate, cateIndex) in plan.dones" :key="cateIndex">
+      <div v-for="(cate, cateIndex) in cateDones" :key="cateIndex">
         <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
             <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
@@ -67,6 +67,7 @@
 import HomeHeader from '@/components/HomeHeader'
 
 import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -82,6 +83,18 @@ export default {
   computed: {
     ...mapState('plan', ['plan']),
     ...mapState('category', ['cates']),
+
+    cateTodos: {
+      get: function() {
+        return cateUtils.getSortCatesFromEquips(this.plan.todos)
+      }
+    },
+
+    cateDones: {
+      get: function() {
+        return cateUtils.getSortCatesFromEquips(this.plan.dones)
+      }
+    },
 
     bottomHeight: {
       get: function() {

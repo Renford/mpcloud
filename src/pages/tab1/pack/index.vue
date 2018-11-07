@@ -4,7 +4,7 @@
     <wux-dialog id="wux-dialog" />
 
     <form @submit="onFormSubmit">
-      <div v-for="(cate, cateIndex) in plan.todos" :key="cateIndex">
+      <div v-for="(cate, cateIndex) in cateTodos" :key="cateIndex">
         <cate-group :cate="cate"></cate-group>
       </div>
       
@@ -19,6 +19,7 @@
 <script>
 import api from '@/api/api'
 import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 import CateGroup from '@/components/CateGroup'
 import { $wuxDialog } from '../../../../static/wux/index'
@@ -34,6 +35,12 @@ export default {
     bottomHeight: {
       get: function() {
         return appUtils.bottomHeight
+      }
+    },
+
+    cateTodos: {
+      get: function() {
+        return cateUtils.getSortCatesFromEquips(this.plan.todos)
       }
     }
   },
@@ -116,29 +123,27 @@ const todos2dones = (obj, type, that) => {
   let dones = []
   let selects = []
 
-  plan.dones.forEach(cate => {
-    const arr = cate.equips.map(equip => {
-      return equip.name
-    })
-    dones = dones.concat(arr)
+  selects = Object.values(obj).reduce((res, arr) => {
+    return res.concat(arr)
   })
 
-  plan.todos.forEach(cate => {
-    const arr = cate.equips.map(equip => {
+  todos = plan.todos
+    .filter(equip => {
+      return selects.indexOf(equip.name) === -1
+    })
+    .map(equip => {
       return equip.name
     })
-    todos = todos.concat(arr)
 
-    selects = selects.concat(obj[cate.cateId])
-  })
+  dones = plan.dones
+    .map(equip => {
+      return equip.name
+    })
+    .concat(selects)
 
   if (type === 1) {
     plan.status = 1
     plan.statusName = '进行中'
-    selects.forEach(name => {
-      dones.push(name)
-      todos.splice(todos.indexOf(name), 1)
-    })
     plan.todos = todos
     plan.dones = dones
   } else if (type === 2) {

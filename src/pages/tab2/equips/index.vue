@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import cateUtils from '@/common/utils/CateUtils'
+
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -34,24 +36,30 @@ export default {
 
     sections: {
       get: function() {
-        const obj = {}
-        this.equips.forEach(equip => {
-          if (obj[equip.cateId] === undefined) {
-            obj[equip.cateId] = [equip]
-          } else {
-            obj[equip.cateId] = [...obj[equip.cateId], equip]
-          }
-        })
-
-        return Object.keys(obj).map(id => {
-          return {
-            cateId: id,
-            cateName: obj[id][0].cateName,
-            equips: obj[id]
-          }
-        })
+        return cateUtils.getSortCatesFromEquips(this.equips)
       }
     }
+
+    // sections: {
+    //   get: function() {
+    //     const obj = {}
+    //     this.equips.forEach(equip => {
+    //       if (obj[equip.cateId] === undefined) {
+    //         obj[equip.cateId] = [equip]
+    //       } else {
+    //         obj[equip.cateId] = [...obj[equip.cateId], equip]
+    //       }
+    //     })
+
+    //     return Object.keys(obj).map(id => {
+    //       return {
+    //         cateId: id,
+    //         cateName: obj[id][0].cateName,
+    //         equips: obj[id]
+    //       }
+    //     })
+    //   }
+    // }
   },
 
   components: {},

@@ -1,5 +1,5 @@
 import api from '@/api/api'
-import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 const state = {
   equips: []
@@ -18,7 +18,7 @@ const actions = {
         title: '数据加载中...'
       })
     }
-    const ids = [cateId, ...appUtils.getBaseCateIds()]
+    const ids = [cateId, ...cateUtils.getBaseCateIds()]
     return api.travel
       .getEquips(0, ids)
       .then(res => {

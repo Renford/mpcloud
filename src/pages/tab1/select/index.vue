@@ -17,6 +17,7 @@ import CateGroup from '@/components/CateGroup'
 
 import api from '@/api/api'
 import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -38,33 +39,27 @@ export default {
 
     sections: {
       get: function() {
-        // 为了规避二次进入选中装备错误，暂时屏蔽已添加的装备
+        // if (Object.keys(this.plan).length === 0) {
+        //   return []
+        // }
+
+        // 过滤已装包的装备
         let filters = []
         if (this.viewType === '3' || this.viewType === '4') {
-          // const cates = this.plan.todos.concat(this.plan.dones)
-          const cates = this.plan.dones
-          cates.forEach(cate => {
-            const names = cate.equips.map(equip => {
+          if (this.plan.dones.length > 0) {
+            filters = this.plan.dones.map(equip => {
               return equip.name
             })
-            filters = [...filters, ...names]
-          })
+          }
         }
 
-        const obj = {}
-        this.equips
-          .filter(equip => {
-            return filters.indexOf(equip.name) === -1
-          })
-          .forEach(equip => {
-            if (obj[equip.cateId] === undefined) {
-              obj[equip.cateId] = [equip]
-            } else {
-              obj[equip.cateId] = [...obj[equip.cateId], equip]
-            }
-          })
+        console.log('=========filters==', filters, this.equips)
 
-        return getShowOrder(obj, this)
+        const equips = this.equips.filter(equip => {
+          return filters.indexOf(equip.name) === -1
+        })
+
+        return cateUtils.getSortCatesFromEquips(equips)
       }
     }
   },
@@ -132,31 +127,12 @@ const updateSelectObject = that => {
   }
 
   const obj = {}
-  that.plan.todos.forEach(cate => {
-    if (typeof cate === 'string') {
-      return cate
+  that.plan.todos.forEach(equip => {
+    if (obj[equip.cateId] === undefined) {
+      obj[equip.cateId] = [equip.name]
+    } else {
+      obj[equip.cateId] = [...obj[equip.cateId], equip.name]
     }
-
-    const equips = cate.equips.map(equip => {
-      return equip.name
-    })
-    obj[cate.cateId] = equips
-  })
-
-  that.plan.dones.forEach(cate => {
-    if (typeof cate === 'string') {
-      return cate
-    }
-
-    const equips = cate.equips.map(equip => {
-      return equip.name
-    })
-
-    let arr = []
-    if (obj[cate.cateId] !== undefined) {
-      arr = obj[cate.cateId]
-    }
-    obj[cate.cateId] = arr.concat(equips)
   })
 
   that.selectObject = obj
@@ -185,11 +161,8 @@ const getRequestPlan = (obj, plan) => {
   let todos = []
   let dones = []
 
-  plan.dones.forEach(cate => {
-    const arr = cate.equips.map(equip => {
-      return equip.name
-    })
-    dones = dones.concat(arr)
+  dones = plan.dones.map(equip => {
+    return equip.name
   })
 
   Object.values(obj).forEach(arr => {
@@ -222,47 +195,6 @@ const updatePlan = async (equips, plan, that) => {
       wx.hideLoading()
       console.log('===update err ===', err)
     })
-}
-
-const getShowOrder = (obj, that) => {
-  if (Object.keys(obj).length === 0) {
-    return []
-  }
-
-  console.log('====on show order', that)
-
-  if (that.viewType === '2' || that.viewType === '4') {
-    return Object.keys(obj).map(id => {
-      return {
-        cateId: id,
-        cateName: obj[id][0].cateName,
-        equips: obj[id]
-      }
-    })
-  }
-
-  const first = {
-    cateId: that.cateId,
-    cateName: obj[that.cateId][0].cateName,
-    equips: obj[that.cateId]
-  }
-  const last = {
-    cateId: 'qita',
-    cateName: obj['qita'][0].cateName,
-    equips: obj['qita']
-  }
-  delete obj[that.cateId]
-  delete obj['qita']
-
-  const others = Object.keys(obj).map(id => {
-    return {
-      cateId: id,
-      cateName: obj[id][0].cateName,
-      equips: obj[id]
-    }
-  })
-
-  return [first, ...others, last]
 }
 </script>
 

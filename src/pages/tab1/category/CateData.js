@@ -103,7 +103,7 @@ const cates = [
     cateType: '1',
     iconUrl:
       'cloud://mycloud-243c6f.8d35-mycloud-243c6f/categories/icon_sandy.png',
-    equips: ['沙滩泳衣', '沙滩裤', '沙滩巾', '拖鞋']
+    equips: ['沙滩泳衣', '沙滩裤', '沙滩巾']
   },
   {
     cateId: 'huaxue',
@@ -116,7 +116,7 @@ const cates = [
   {
     cateId: 'dianzi',
     cateName: '电子设备',
-    cateType: '0',
+    cateType: '2',
     equips: [
       '手机',
       '相机',
@@ -131,7 +131,7 @@ const cates = [
   {
     cateId: 'xishu',
     cateName: '洗漱用品',
-    cateType: '0',
+    cateType: '2',
     equips: [
       '牙刷',
       '牙膏',
@@ -148,7 +148,7 @@ const cates = [
   {
     cateId: 'yifu',
     cateName: '衣服',
-    cateType: '0',
+    cateType: '2',
     equips: [
       '帽子',
       '内衣',
@@ -158,6 +158,7 @@ const cates = [
       '皮带',
       '短裤',
       '裤子',
+      '拖鞋',
       '太阳镜',
       '隐形眼镜',
       '耳塞',
@@ -168,7 +169,7 @@ const cates = [
   {
     cateId: 'siwu',
     cateName: '常用食物',
-    cateType: '0',
+    cateType: '2',
     equips: [
       '士力架',
       '面包',
@@ -185,7 +186,7 @@ const cates = [
   {
     cateId: 'qita',
     cateName: '其他',
-    cateType: '0',
+    cateType: '3',
     equips: ['钥匙', '钱包', '雨伞', '指南针', '急救包']
   }
 ]

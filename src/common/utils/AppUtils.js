@@ -1,16 +1,17 @@
-import api from '@/api/api'
+// import api from '@/api/api'
 
 const OpenIdKey = 'OpenIdKey'
 const UserInfoKey = 'UserInfoKey'
-const CategoriesKey = 'CategoriesKey'
+// const CategoriesKey = 'CategoriesKey'
 
 class AppUtils {
   openId = ''
   userInfo = {}
   bottomHeight = 48
-  cates = []
 
-  _baseCateIds = []
+  // cates = []
+  // _baseCateIds = []
+  // _sortCateIds = []
 
   saveOpenId(openId) {
     this.openId = openId
@@ -28,13 +29,13 @@ class AppUtils {
     })
   }
 
-  saveCates(cates) {
-    this.cates = cates
-    wx.setStorage({
-      key: CategoriesKey,
-      data: cates
-    })
-  }
+  // saveCates(cates) {
+  //   this.cates = cates
+  //   wx.setStorage({
+  //     key: CategoriesKey,
+  //     data: cates
+  //   })
+  // }
 
   loadStorage() {
     const that = this
@@ -52,12 +53,12 @@ class AppUtils {
       }
     })
 
-    wx.getStorage({
-      key: CategoriesKey,
-      success: res => {
-        that.cates = res.data
-      }
-    })
+    // wx.getStorage({
+    //   key: CategoriesKey,
+    //   success: res => {
+    //     that.cates = res.data
+    //   }
+    // })
   }
 
   getSystemInfo() {
@@ -93,71 +94,27 @@ class AppUtils {
       })
   }
 
-  getBaseCateIds() {
-    if (this._baseCateIds.length === 0) {
-      this._baseCateIds = this.cates
-        .filter(cate => {
-          return cate.cateType === '0'
-        })
-        .map(cate => {
-          return cate.cateId
-        })
-    }
-
-    return this._baseCateIds
-  }
-
-  // launchApp(that) {
-  //   if (this.openId.length === 0) {
-  //     this.wxLogin(that)
-  //     this.getOfficeInfo()
-  //   } else {
+  // getBaseCateIds() {
+  //   if (this._baseCateIds.length === 0) {
+  //     this._baseCateIds = this.cates
+  //       .filter(cate => {
+  //         return cate.cateType !== '1'
+  //       })
+  //       .map(cate => {
+  //         return cate.cateId
+  //       })
   //   }
+
+  //   return this._baseCateIds
   // }
 
-  // wxLogin(that) {
-  //   let tempThis = this
-  //   wx.login({
-  //     success: function(res) {
-  //       let code = res.code
-  //       tempThis
-  //         .getOpenId(code)
-  //         .then(() => {
-  //           tempThis
-  //             .getUserInfo()
-  //             .then(res => {})
-  //             .catch(err => {
-  //               console.log('用户信息获取失败，进入注册页面\n', err)
-  //               that.$router.push({
-  //                 path: '/pages/tab3/register/main',
-  //                 reLaunch: true
-  //               })
-  //             })
-  //         })
-  //         .catch(err => {
-  //           console.log('===getOpenid error:', err)
-  //         })
-  //     },
-  //     fail: function(err) {
-  //       console.log('===wx login error:', err)
-  //     }
-  //   })
-  // }
-
-  // getOpenId(code) {
-  //   let tempThis = this
-  //   return api.mine.getOpenId(code).then(res => {
-  //     tempThis.openId = res.openid
-  //   })
-  // }
-
-  // getUserInfo() {
-  //   let tempThis = this
-  //   return api.mine.getUserInfo(this.openId).then(res => {
-  //     tempThis.userInfo = res[0]
-  //     tempThis.saveOpenId(tempThis.openId)
-  //     tempThis.saveUserInfo(tempThis.userInfo)
-  //   })
+  // getSortCateIds() {
+  //   if (this._sortCateIds.length === 0) {
+  //     this._sortCateIds = this.cates.map(cate => {
+  //       return cate.cateId
+  //     })
+  //   }
+  //   return this._sortCateIds
   // }
 
   getShareObject() {

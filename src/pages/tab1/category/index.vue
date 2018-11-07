@@ -15,6 +15,8 @@
 
 <script>
 import api from '@/api/api'
+import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -64,8 +66,10 @@ export default {
   },
 
   mounted() {
-    // this.getCates()
     // cateData.init()
+    if (cateUtils.cates.length === 0) {
+      this.getCates()
+    }
   },
 
   created() {}

@@ -1,5 +1,5 @@
 import api from '@/api/api'
-import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 
 const state = {
   cates: [], // 大类，不包含equips
@@ -22,7 +22,7 @@ const actions = {
       .getCategories(ids)
       .then(res => {
         commit('setCates', res)
-        appUtils.saveCates(res)
+        cateUtils.saveCates(res)
       })
       .catch(err => {
         console.log('===errr:', err)

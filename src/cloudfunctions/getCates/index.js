@@ -20,6 +20,7 @@ exports.main = async (event, context) => {
       .where({
         cateId: ids
       })
+      .orderBy('cateType', 'asc')
       .get()
 
     return result.successResult(res)
@@ -27,33 +28,3 @@ exports.main = async (event, context) => {
     return result.errorResult(error)
   }
 }
-
-// // 指定返回顺序
-// const cateIds = [
-//   'luying',
-//   'dengshan',
-//   'tubu',
-//   'sheying',
-//   'qixing',
-//   'shatan',
-//   'huaxue',
-//   'youyong',
-//   'dianzi',
-//   'xishu',
-//   'yiwu'
-// ]
-
-// const arr2Sort = arr => {
-//   const obj = {}
-//   arr.forEach(cate => {
-//     obj[cate.cateId] = cate
-//   })
-
-//   return cateIds
-//     .map(id => {
-//       return obj[id]
-//     })
-//     .filter(cate => {
-//       return cate !== undefined
-//     })
-// }

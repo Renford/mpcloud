@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(cate, cateIndex) in cates" :key="cateIndex">
+    <div v-for="(cate, cateIndex) in sortCates" :key="cateIndex">
       <div v-if="cate.equips.length > 0">
         <wux-cell-group :title="cate.cateName">
           <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import cateUtils from '@/common/utils/CateUtils'
 export default {
   data() {
     return {
@@ -21,41 +22,14 @@ export default {
   },
 
   computed: {
-    cates: {
+    sortCates: {
       get: function() {
         if (Object.keys(this.plan).length === 0) {
           return []
         }
 
-        if (parseInt(this.plan.status) === 0) {
-          return this.plan.todos
-        } else if (parseInt(this.plan.status) === 2) {
-          return this.plan.dones
-        } else {
-          const obj = {}
-          this.plan.todos.forEach(item => {
-            obj[item.cateId] = item.equips
-          })
-
-          this.plan.dones.forEach(item => {
-            if (item.equips.length > 0) {
-              if (obj[item.cateId] === undefined) {
-                obj[item.cateId] = item.equips
-              } else {
-                const equips = obj[item.cateId]
-                obj[item.cateId] = [...equips, ...item.equips]
-              }
-            }
-          })
-
-          return Object.values(obj).map(equips => {
-            return {
-              cateId: equips[0].cateId,
-              cateName: equips[0].cateName,
-              equips: equips
-            }
-          })
-        }
+        const equips = [...this.plan.todos, ...this.plan.dones]
+        return cateUtils.getSortCatesFromEquips(equips)
       }
     }
   },

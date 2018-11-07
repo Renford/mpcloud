@@ -30,6 +30,7 @@ import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 import appUtils from '@/common/utils/AppUtils'
+import cateUtils from '@/common/utils/CateUtils'
 export default {
   data() {
     return {
@@ -40,7 +41,7 @@ export default {
   computed: {
     cateNames: {
       get: function() {
-        return appUtils.cates.map(cate => {
+        return cateUtils.cates.map(cate => {
           return cate.cateName
         })
       }
@@ -73,7 +74,7 @@ export default {
         onConfirm: (value, index, options) => {
           console.log('===wux-select--onConfirm', value, index, options)
           if (index !== -1) {
-            const cate = appUtils.cates[index]
+            const cate = cateUtils.cates[index]
             that.equip.cateId = cate.cateId
             that.equip.cateName = cate.cateName
           }
@@ -114,9 +115,9 @@ export default {
     console.log('===equips:', this.equip)
 
     const that = this
-    if (appUtils.cates.length === 0) {
+    if (cateUtils.cates.length === 0) {
       this.getCates().then(res => {
-        that.cateNames = appUtils.cates.map(cate => {
+        that.cateNames = cateUtils.cates.map(cate => {
           return cate.cateName
         })
       })
