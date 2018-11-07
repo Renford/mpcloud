@@ -51,12 +51,17 @@
       </div>
 
       <div class="user-container">
-        <wux-image :src="headUrl" shape="circle" width=100rpx height=100rpx></wux-image>
-        <button class="user-button" open-type="getUserInfo" @getuserinfo="onGetUserInfo"></button>
+        <wux-image :src="headUrl" shape="circle" width=90rpx height=90rpx></wux-image>
+        <button class="user-button B0" open-type="getUserInfo" @getuserinfo="onGetUserInfo"></button>
+      </div>
+
+      <div class="share-container">
+        <wux-image src="/static/icon_share.png" shape="circle" width=90rpx height=90rpx></wux-image>
+        <button class="share-button B0" open-type="share"></button>
       </div>
 
       <div class="add-container" @click="onAddEquipsEvent">
-        <wux-image src="/static/icon_add.png" shape="circle" width=100rpx height=100rpx></wux-image>
+        <wux-image src="/static/icon_add.png" shape="circle" width=90rpx height=90rpx></wux-image>
       </div>
     </div>
    
@@ -132,11 +137,6 @@ export default {
     },
 
     onAddEquipsEvent(e) {
-      console.log(
-        '=====onAddEquipsEvent',
-        this.plan,
-        this.plan.cateId.length === 0
-      )
       const type = this.plan.cateId.length === 0 ? 4 : 3
       const planStr = JSON.stringify(this.plan)
       this.$router.push({
@@ -189,8 +189,30 @@ export default {
     }
   },
 
-  onShareAppMessage() {
-    return appUtils.getShareObject()
+  onShareAppMessage(e) {
+    let path = ''
+    if (e.from === 'button') {
+      path = `/pages/tab1/home/main?planId=${this.plan._id}`
+    } else {
+      path = `/pages/tab1/home/main`
+    }
+    return {
+      title: '旅中人',
+      path: path,
+      imageUrl: '/static/icon'
+    }
+  },
+
+  mounted() {
+    if (appUtils.isShowSharePlan()) {
+      this.$router.push({
+        path: '/pages/tab1/select/main',
+        query: {
+          type: '5',
+          planId: appUtils.sharePlanId
+        }
+      })
+    }
   }
 }
 
@@ -253,8 +275,8 @@ function updateViewStatus(that) {
   z-index: 100;
   right: 30rpx;
   bottom: 210rpx;
-  width: 100rpx;
-  height: 100rpx;
+  width: 90rpx;
+  height: 90rpx;
   background-color: #7a7a7a;
   border-radius: 50rpx;
 }
@@ -264,8 +286,30 @@ function updateViewStatus(that) {
   z-index: 101;
   right: 30rpx;
   bottom: 210rpx;
-  width: 100rpx;
-  height: 100rpx;
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50rpx;
+  opacity: 0;
+}
+
+.share-container {
+  position: fixed;
+  z-index: 100;
+  right: 30rpx;
+  bottom: 330rpx;
+  width: 90rpx;
+  height: 90rpx;
+  background-color: #7a7a7a;
+  border-radius: 50rpx;
+}
+
+.share-button {
+  position: fixed;
+  z-index: 101;
+  right: 30rpx;
+  bottom: 330rpx;
+  width: 90rpx;
+  height: 90rpx;
   border-radius: 50rpx;
   opacity: 0;
 }
@@ -274,9 +318,9 @@ function updateViewStatus(that) {
   position: fixed;
   z-index: 100;
   right: 30rpx;
-  bottom: 330rpx;
-  width: 100rpx;
-  height: 100rpx;
+  bottom: 450rpx;
+  width: 90rpx;
+  height: 90rpx;
   background-color: #7a7a7a;
   border-radius: 50rpx;
 }

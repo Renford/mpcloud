@@ -25,7 +25,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      viewType: '', // 1、创建——选择，2、创建——选择我的装备，3、添加——选择，4、添加——选择我的装备
+      viewType: '', // 1、创建——选择，2、创建——选择我的装备，3、添加——选择，4、添加——选择我的装备，5、分享
       cateId: '',
       nextButtonTitle: '确定',
 
@@ -39,10 +39,6 @@ export default {
 
     sections: {
       get: function() {
-        // if (Object.keys(this.plan).length === 0) {
-        //   return []
-        // }
-
         // 过滤已装包的装备
         let filters = []
         if (this.viewType === '3' || this.viewType === '4') {
@@ -66,12 +62,15 @@ export default {
 
   watch: {
     viewType(type) {
-      if (type === '3' || type === '4') {
-        wx.setNavigationBarTitle({ title: '选择装备' })
-        this.nextButtonTitle = '确定'
-      } else if (type === '1' || type === '2') {
+      if (type === '1' || type === '2') {
         wx.setNavigationBarTitle({ title: '选择装备(2/3)' })
         this.nextButtonTitle = '下一步'
+      } else if (type === '3' || type === '4') {
+        wx.setNavigationBarTitle({ title: '选择装备' })
+        this.nextButtonTitle = '确定'
+      } else if (type === '5') {
+        wx.setNavigationBarTitle({ title: 'TA的装备清单' })
+        this.nextButtonTitle = '生成规划清单'
       }
     }
   },
@@ -102,16 +101,17 @@ export default {
   },
 
   onLoad() {
-    this.cateId = this.$route.query.cateId
     this.viewType = this.$route.query.type
+    this.cateId = this.$route.query.cateId
     if (this.viewType === '3' || this.viewType === '4') {
       this.plan = JSON.parse(this.$route.query.plan)
       updateSelectObject(this)
+    } else if (this.viewType === '5') {
     }
 
     if (this.viewType === '2' || this.viewType === '4') {
       this.getMyEquips()
-    } else {
+    } else if (this.viewType === '1' || this.viewType === '3') {
       this.getEquips(this.cateId)
     }
   },

@@ -9,7 +9,7 @@ export default {
     cateUtils.loadStorage()
   },
 
-  onLaunch() {
+  onLaunch(ops) {
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
     } else {
@@ -18,6 +18,11 @@ export default {
         env: 'mycloud-243c6f',
         traceUser: true
       })
+    }
+
+    console.log('=========ops', ops)
+    if (ops.query.planId !== undefined && ops.query.planId.length !== 0) {
+      appUtils.sharePlanId = ops.query.planId
     }
 
     appUtils.getOpenId()

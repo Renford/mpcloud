@@ -1,17 +1,12 @@
-// import api from '@/api/api'
-
 const OpenIdKey = 'OpenIdKey'
 const UserInfoKey = 'UserInfoKey'
-// const CategoriesKey = 'CategoriesKey'
 
 class AppUtils {
   openId = ''
   userInfo = {}
   bottomHeight = 48
 
-  // cates = []
-  // _baseCateIds = []
-  // _sortCateIds = []
+  sharePlanId = ''
 
   saveOpenId(openId) {
     this.openId = openId
@@ -29,13 +24,12 @@ class AppUtils {
     })
   }
 
-  // saveCates(cates) {
-  //   this.cates = cates
-  //   wx.setStorage({
-  //     key: CategoriesKey,
-  //     data: cates
-  //   })
-  // }
+  isShowSharePlan() {
+    if (this.sharePlanId !== undefined && this.sharePlanId.length > 0) {
+      return true
+    }
+    return false
+  }
 
   loadStorage() {
     const that = this
@@ -52,13 +46,6 @@ class AppUtils {
         that.userInfo = res.data
       }
     })
-
-    // wx.getStorage({
-    //   key: CategoriesKey,
-    //   success: res => {
-    //     that.cates = res.data
-    //   }
-    // })
   }
 
   getSystemInfo() {
@@ -93,29 +80,6 @@ class AppUtils {
         console.log('===get openid: ', err)
       })
   }
-
-  // getBaseCateIds() {
-  //   if (this._baseCateIds.length === 0) {
-  //     this._baseCateIds = this.cates
-  //       .filter(cate => {
-  //         return cate.cateType !== '1'
-  //       })
-  //       .map(cate => {
-  //         return cate.cateId
-  //       })
-  //   }
-
-  //   return this._baseCateIds
-  // }
-
-  // getSortCateIds() {
-  //   if (this._sortCateIds.length === 0) {
-  //     this._sortCateIds = this.cates.map(cate => {
-  //       return cate.cateId
-  //     })
-  //   }
-  //   return this._sortCateIds
-  // }
 
   getShareObject() {
     const path = `/pages/tab1/home/main`
