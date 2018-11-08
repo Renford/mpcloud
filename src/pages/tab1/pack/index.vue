@@ -163,13 +163,15 @@ const todos2dones = (obj, type, that) => {
 }
 
 .button-next {
-  width: 75%;
+  width: 100%;
   height: 120rpx;
   border: 0;
   color: white;
 }
 
 .button-finish {
+  position: absolute;
+  right: 0;
   width: 25%;
   height: 96rpx;
   border: 0;

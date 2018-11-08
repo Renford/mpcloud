@@ -1,12 +1,19 @@
 <template>
-  <div>
+  <div class="pack-container">
     <form @submit="onFormSubmit">
       <div v-for="(cate, cateIndex) in sections" :key="cateIndex">
         <cate-group :cate="cate" :selectObject="selectObject"></cate-group>
       </div>
       
-      <div class="bottom-button-container" v-if="equips.length > 0">
+      <!-- <div class="bottom-button-container" v-if="equips.length > 0">
         <button class="form-button" formType="submit">{{nextButtonTitle}}</button>
+      </div> -->
+
+      <div class="bottom-fixed-container flex-row" :style="{height: bottomHeight+'px'}">
+        <button id="100" class="button-next C5" plain formType="submit">{{nextButtonTitle}}</button>
+        <div v-if="viewType==='5'">
+          <button id="101" class="button-finish C5" plain formType="submit">暂不使用</button>
+        </div>
       </div>
     </form>
   </div>
@@ -36,6 +43,13 @@ export default {
 
   computed: {
     ...mapState('equip', ['equips']),
+    ...mapState('plan', ['sharePlan']),
+
+    bottomHeight: {
+      get: function() {
+        return appUtils.bottomHeight
+      }
+    },
 
     sections: {
       get: function() {
@@ -49,9 +63,12 @@ export default {
           }
         }
 
-        console.log('=========filters==', filters, this.equips)
+        let equips = this.equips
+        if (this.viewType === '5' && Object.keys(this.sharePlan).length > 0) {
+          equips = [...this.sharePlan.todos, ...this.sharePlan.dones]
+        }
 
-        const equips = this.equips.filter(equip => {
+        equips = equips.filter(equip => {
           return filters.indexOf(equip.name) === -1
         })
 
@@ -70,7 +87,7 @@ export default {
         this.nextButtonTitle = '确定'
       } else if (type === '5') {
         wx.setNavigationBarTitle({ title: 'TA的装备清单' })
-        this.nextButtonTitle = '生成规划清单'
+        this.nextButtonTitle = '使用TA的清单'
       }
     }
   },
@@ -81,21 +98,36 @@ export default {
 
   methods: {
     ...mapActions('equip', ['getEquips', 'getMyEquips']),
+    ...mapActions('plan', ['getSharePlan']),
 
     onFormSubmit(e) {
-      const array = obj2Array(e.mp.detail.value, this)
-      console.log('======onFormSubmit', array)
-      if (this.viewType === '3' || this.viewType === '4') {
-        const plan = getRequestPlan(e.mp.detail.value, this.plan)
-        updatePlan(array, plan, this)
-      } else if (this.viewType === '1' || this.viewType === '2') {
-        this.$router.push({
-          path: '/pages/tab1/commit/main',
-          query: {
-            cateId: this.cateId,
-            equips: JSON.stringify(array)
-          }
-        })
+      console.log('======onFormSubmit', e)
+      const tag = e.mp.detail.target.id
+
+      if (tag === '100') {
+        const array = obj2Array(e.mp.detail.value, this)
+        if (this.viewType === '3' || this.viewType === '4') {
+          const plan = getRequestPlan(e.mp.detail.value, this.plan)
+          updatePlan(array, plan, this)
+        } else if (this.viewType === '1' || this.viewType === '2') {
+          this.$router.push({
+            path: '/pages/tab1/commit/main',
+            query: {
+              cateId: this.cateId,
+              equips: JSON.stringify(array)
+            }
+          })
+        } else if (this.viewType === '5') {
+          this.$router.push({
+            path: '/pages/tab1/commit/main',
+            query: {
+              cateId: this.cateId,
+              equips: JSON.stringify(array)
+            }
+          })
+        }
+      } else if (tag === '101') {
+        this.$router.back()
       }
     }
   },
@@ -113,6 +145,9 @@ export default {
       this.getMyEquips()
     } else if (this.viewType === '1' || this.viewType === '3') {
       this.getEquips(this.cateId)
+    } else if (this.viewType === '5') {
+      let that = this
+      this.getSharePlan(appUtils.sharePlanId)
     }
   },
 
@@ -199,4 +234,27 @@ const updatePlan = async (equips, plan, that) => {
 </script>
 
 <style scoped>
+.pack-container {
+  padding: 0 0 180rpx 0;
+}
+
+.button-next {
+  width: 100%;
+  height: 120rpx;
+  border: 0;
+  color: white;
+}
+
+.button-finish {
+  position: absolute;
+  right: 0;
+  width: 25%;
+  height: 96rpx;
+  border: 0;
+  color: lightgray;
+  font-size: 26rpx;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 </style>

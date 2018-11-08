@@ -84,7 +84,7 @@ class AppUtils {
   getShareObject() {
     const path = `/pages/tab1/home/main`
     return {
-      title: '旅中人',
+      title: '打包小助手',
       path: path,
       imageUrl: '/static/icon',
       success: res => {

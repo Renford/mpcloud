@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "旅中人",
+  "navigationBarTitleText": "打包小助手",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
     "wux-image": "/static/wux/image/index",

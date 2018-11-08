@@ -9,16 +9,15 @@ const _ = db.command
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const status = event.status
-  const count = event.count
   const openId = event.userInfo.openId
+  const count = event.count
+  const params = getParams(event)
 
   try {
     const res = await db
       .collection('myplans')
       .where({
-        _openid: openId,
-        status: _.in(status)
+        ...params
       })
       .orderBy('status', 'asc')
       .orderBy('date', 'asc')
@@ -28,7 +27,6 @@ exports.main = async (event, context) => {
     if (res.errMsg === 'collection.get:ok' && res.data.length > 0) {
       for (let i = 0; i < res.data.length; i++) {
         const plan = res.data[i]
-
         plan.todos = await handleEquips(plan.todos, openId)
         plan.dones = await handleEquips(plan.dones, openId)
       }
@@ -37,6 +35,24 @@ exports.main = async (event, context) => {
     return result.successResult(res)
   } catch (error) {
     return result.errorResult(error)
+  }
+}
+
+// 请求参数，根据planId区分
+const getParams = event => {
+  const status = event.status
+  const planId = event.planId
+  const openId = event.userInfo.openId
+
+  if (planId !== undefined) {
+    return {
+      _id: planId
+    }
+  } else {
+    return {
+      _openid: openId,
+      status: _.in(status)
+    }
   }
 }
 

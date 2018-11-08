@@ -197,22 +197,14 @@ export default {
       path = `/pages/tab1/home/main`
     }
     return {
-      title: '旅中人',
+      title: '打包小助手',
       path: path,
       imageUrl: '/static/icon'
     }
   },
 
   mounted() {
-    if (appUtils.isShowSharePlan()) {
-      this.$router.push({
-        path: '/pages/tab1/select/main',
-        query: {
-          type: '5',
-          planId: appUtils.sharePlanId
-        }
-      })
-    }
+    getCurrentPlan(this)
   }
 }
 
@@ -223,19 +215,30 @@ function getOpenId(that) {
 }
 
 function getCurrentPlan(that) {
-  that
-    .getCurrentPlan()
-    .then(res => {
-      that.getCates()
-      updateViewStatus(that)
-      if (Object.keys(that.plan).length > 0) {
-        wx.setNavigationBarTitle({ title: that.plan.title })
-      }
+  if (cateUtils.cates.length === 0) {
+    that.getCates().then(res => {
+      that
+        .getCurrentPlan()
+        .then(res => {
+          updateViewStatus(that)
+          showImportShareData(that)
+        })
+        .catch(err => {
+          console.log('err====', err)
+          updateViewStatus(that)
+        })
     })
-    .catch(err => {
-      console.log('err====', err)
-      updateViewStatus(that)
-    })
+  } else {
+    that
+      .getCurrentPlan()
+      .then(res => {
+        updateViewStatus(that)
+      })
+      .catch(err => {
+        console.log('err====', err)
+        updateViewStatus(that)
+      })
+  }
 }
 
 function updateViewStatus(that) {
@@ -245,6 +248,21 @@ function updateViewStatus(that) {
     that.viewStatus = 1
   } else {
     that.viewStatus = 2
+  }
+  if (Object.keys(that.plan).length > 0) {
+    wx.setNavigationBarTitle({ title: that.plan.title })
+  }
+}
+
+function showImportShareData(that) {
+  if (appUtils.isShowSharePlan() && Object.keys(that.plan).length === 0) {
+    that.$router.push({
+      path: '/pages/tab1/select/main',
+      query: {
+        type: '5',
+        planId: appUtils.sharePlanId
+      }
+    })
   }
 }
 </script>

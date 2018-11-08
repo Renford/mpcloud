@@ -75,6 +75,16 @@ class Travel {
     })
   }
 
+  getPlanFromId(planId) {
+    const params = {
+      planId: planId,
+      count: 1
+    }
+    return cloud.callFunction('getPlan', params).then(res => {
+      return res
+    })
+  }
+
   updatePlan(plan) {
     const params = {
       plan: plan
