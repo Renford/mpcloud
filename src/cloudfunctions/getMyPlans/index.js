@@ -7,17 +7,18 @@ cloud.init()
 const db = cloud.database()
 const _ = db.command
 
-// 云函数入口函数
+// 请求我的规划
 exports.main = async (event, context) => {
   const openId = event.userInfo.openId
   const count = event.count
-  const params = getParams(event)
+  const status = event.status
 
   try {
     const res = await db
       .collection('myplans')
       .where({
-        ...params
+        _openid: openId,
+        status: _.in(status)
       })
       .orderBy('status', 'asc')
       .orderBy('date', 'asc')
@@ -35,24 +36,6 @@ exports.main = async (event, context) => {
     return result.successResult(res)
   } catch (error) {
     return result.errorResult(error)
-  }
-}
-
-// 请求参数，根据planId区分
-const getParams = event => {
-  const status = event.status
-  const planId = event.planId
-  const openId = event.userInfo.openId
-
-  if (planId !== undefined) {
-    return {
-      _id: planId
-    }
-  } else {
-    return {
-      _openid: openId,
-      status: _.in(status)
-    }
   }
 }
 

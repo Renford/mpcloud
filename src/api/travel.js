@@ -70,17 +70,17 @@ class Travel {
       status: status,
       count: count
     }
-    return cloud.callFunction('getPlan', params).then(res => {
+    return cloud.callFunction('getMyPlans', params).then(res => {
       return res
     })
   }
 
   getPlanFromId(planId) {
     const params = {
-      planId: planId,
+      ids: [planId],
       count: 1
     }
-    return cloud.callFunction('getPlan', params).then(res => {
+    return cloud.callFunction('getPlans', params).then(res => {
       return res
     })
   }

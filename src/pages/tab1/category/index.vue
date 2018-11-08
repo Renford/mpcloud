@@ -33,7 +33,7 @@ export default {
 
     showCates: {
       get: function() {
-        return this.cates.filter(cate => {
+        return cateUtils.cates.filter(cate => {
           return cate.cateType === '1'
         })
       }

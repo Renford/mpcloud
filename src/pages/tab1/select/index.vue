@@ -1,13 +1,16 @@
 <template>
   <div class="pack-container">
+
+    <wux-toast id="wux-toast" />
+    
+    <div class="tips-container F5 C2 B8" v-if="viewType==='5'">
+      <div>此为您好友的装备清单</div>
+    </div>
+
     <form @submit="onFormSubmit">
       <div v-for="(cate, cateIndex) in sections" :key="cateIndex">
         <cate-group :cate="cate" :selectObject="selectObject"></cate-group>
       </div>
-      
-      <!-- <div class="bottom-button-container" v-if="equips.length > 0">
-        <button class="form-button" formType="submit">{{nextButtonTitle}}</button>
-      </div> -->
 
       <div class="bottom-fixed-container flex-row" :style="{height: bottomHeight+'px'}">
         <button id="100" class="button-next C5" plain formType="submit">{{nextButtonTitle}}</button>
@@ -16,11 +19,13 @@
         </div>
       </div>
     </form>
+
   </div>
 </template>
 
 <script>
 import CateGroup from '@/components/CateGroup'
+import { $wuxSelect, $wuxToast } from '../../../../static/wux/index'
 
 import api from '@/api/api'
 import appUtils from '@/common/utils/AppUtils'
@@ -106,6 +111,14 @@ export default {
 
       if (tag === '100') {
         const array = obj2Array(e.mp.detail.value, this)
+        if (array.length === 0) {
+          $wuxToast().info({
+            type: 'text',
+            text: '出去玩总要带点装备吧!'
+          })
+          return
+        }
+
         if (this.viewType === '3' || this.viewType === '4') {
           const plan = getRequestPlan(e.mp.detail.value, this.plan)
           updatePlan(array, plan, this)
@@ -137,8 +150,7 @@ export default {
     this.cateId = this.$route.query.cateId
     if (this.viewType === '3' || this.viewType === '4') {
       this.plan = JSON.parse(this.$route.query.plan)
-      updateSelectObject(this)
-    } else if (this.viewType === '5') {
+      updateSelectObject(this.plan, this)
     }
 
     if (this.viewType === '2' || this.viewType === '4') {
@@ -147,7 +159,9 @@ export default {
       this.getEquips(this.cateId)
     } else if (this.viewType === '5') {
       let that = this
-      this.getSharePlan(appUtils.sharePlanId)
+      this.getSharePlan(appUtils.sharePlanId).then(res => {
+        updateSelectObject(that.sharePlan, that)
+      })
     }
   },
 
@@ -156,13 +170,13 @@ export default {
   }
 }
 
-const updateSelectObject = that => {
-  if (Object.keys(that.plan).length === 0) {
+const updateSelectObject = (plan, that) => {
+  if (Object.keys(plan).length === 0) {
     return {}
   }
 
   const obj = {}
-  that.plan.todos.forEach(equip => {
+  plan.todos.forEach(equip => {
     if (obj[equip.cateId] === undefined) {
       obj[equip.cateId] = [equip.name]
     } else {
@@ -236,6 +250,14 @@ const updatePlan = async (equips, plan, that) => {
 <style scoped>
 .pack-container {
   padding: 0 0 180rpx 0;
+}
+
+.tips-container {
+  height: 60rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .button-next {

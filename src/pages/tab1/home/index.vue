@@ -201,10 +201,6 @@ export default {
       path: path,
       imageUrl: '/static/icon'
     }
-  },
-
-  mounted() {
-    getCurrentPlan(this)
   }
 }
 
