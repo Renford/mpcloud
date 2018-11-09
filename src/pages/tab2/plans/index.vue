@@ -3,13 +3,18 @@
 
     <wux-cell-group>
       <div v-for="(plan, index) in plans" :key="index">
-        <div class="sub-title C3 F4">{{plan.date}}</div>
-        <wux-wing-blank size="default">
-          <wux-card :title="plan.title" :extra="plan.statusName" @click="onItemEvent(plan)">
-            <div slot="body">{{plan.originating + '-->' + plan.destination}}</div>
-            <!-- <div slot="footer">{{plan.date}}</div> -->
-          </wux-card>
-        </wux-wing-blank>
+        <van-swipe-cell right-width="65">
+          <div class="cell-container flex-col B1" @click="onItemEvent(plan)">
+            <div class="C1 F3">{{plan.title}}</div>
+            <div class="cell-content C1 F4">{{plan.originating + '-->' + plan.destination}}</div>
+            <div class="flex-row F4 C3">
+              <div>{{plan.statusName}}</div>
+              <div class="cell-divider">|</div>
+              <div>{{plan.date}}</div>
+            </div>
+          </div>
+          <div slot="right" class="cell-right B0 F4 C5" @click="onDeleteEvent(plan)">删除</div>
+        </van-swipe-cell>
       </div>
     </wux-cell-group>
 
@@ -17,6 +22,7 @@
 </template>
 
 <script>
+import api from '@/api/api'
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -45,11 +51,29 @@ export default {
           plan: planStr
         }
       })
+    },
+
+    onDeleteEvent(plan) {
+      wx.showLoading({
+        title: '正在删除...'
+      })
+
+      const that = this
+      api.plan.deletePlan(plan._id).then(res => {
+        that
+          .getPlans()
+          .then(res => {
+            wx.hideLoading()
+          })
+          .catch(err => {
+            console.log('===err', err)
+            wx.hideLoading()
+          })
+      })
     }
   },
 
   mounted() {
-    const that = this
     this.getPlans()
   },
 
@@ -58,7 +82,27 @@ export default {
 </script>
 
 <style scoped>
-.sub-title {
-  padding: 15rpx 0 5rpx 30rpx;
+.cell-container {
+  height: 200rpx;
+  padding: 0 30rpx;
+  margin-bottom: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cell-content {
+  margin: 10rpx 0;
+}
+
+.cell-divider {
+  padding: 0 20rpx;
+}
+
+.cell-right {
+  width: 130rpx;
+  height: 200rpx;
+  text-align: center;
+  line-height: 200rpx;
 }
 </style>

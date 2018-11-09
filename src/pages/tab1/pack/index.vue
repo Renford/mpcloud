@@ -103,7 +103,7 @@ const updatePlan = that => {
   wx.showLoading({
     title: '数据更新中...'
   })
-  api.travel
+  api.plan
     .updatePlan(that.plan)
     .then(res => {
       wx.hideLoading()

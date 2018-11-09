@@ -232,8 +232,8 @@ const updatePlan = async (equips, plan, that) => {
     title: '数据更新中...'
   })
 
-  const res = await api.travel.addEquips(1, equips)
-  api.travel
+  const res = await api.equip.addEquips(1, equips)
+  api.plan
     .updatePlan(plan)
     .then(res => {
       wx.hideLoading()

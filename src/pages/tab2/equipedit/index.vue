@@ -93,7 +93,7 @@ export default {
           title: '数据更新中...'
         })
         const that = this
-        api.travel
+        api.equip
           .updateEquip(0, this.equip)
           .then(res => {
             wx.hideLoading()

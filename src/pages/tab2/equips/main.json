@@ -5,6 +5,7 @@
     "wux-prompt": "/static/wux/prompt/index",
     "wux-input": "/static/wux/input/index",
     "wux-cell": "/static/wux/cell/index",
-    "wux-cell-group": "/static/wux/cell-group/index"
+    "wux-cell-group": "/static/wux/cell-group/index",
+    "van-swipe-cell": "/static/vant/swipe-cell/index"
   }
 }

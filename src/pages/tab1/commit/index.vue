@@ -88,7 +88,7 @@ export default {
       wx.showLoading({
         title: '数据提交中...'
       })
-      api.travel
+      api.plan
         .addPlan(plan)
         .then(res => {
           wx.hideLoading()

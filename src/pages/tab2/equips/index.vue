@@ -5,9 +5,13 @@
       <wux-cell-group :title="cate.cateName">
         <div v-for="(equip, equipIndex) in cate.equips" :key="equipIndex">
           <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
+          <!-- <van-swipe-cell right-width="65">
+            <wux-cell :title="equip.name" is-link :label="equip.remark" @click="onItemEvent(equip)"></wux-cell>
+            <div slot="right" class="cell-right B0 F4 C5" @click="onDeleteEvent(equip)">删除</div>
+          </van-swipe-cell> -->
         </div>
         <wux-cell hover-class="none">
-          <wux-input :id="cateIndex" placeholder="添加新装备" clear placeholder-class="C1 F1" @confirm="onConfirm">
+          <wux-input :id="cateIndex" placeholder="添加新装备" clear placeholder-class="C1 F1" @confirm="onAddEvent">
             <image style="width: 20px; height: 20px; margin-right: 5px" src="/static/icon_add.png" />
           </wux-input>
         </wux-cell>
@@ -23,6 +27,7 @@
 <script>
 import cateUtils from '@/common/utils/CateUtils'
 
+import api from '@/api/api'
 import store from '@/store'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -39,27 +44,6 @@ export default {
         return cateUtils.getSortCatesFromEquips(this.equips)
       }
     }
-
-    // sections: {
-    //   get: function() {
-    //     const obj = {}
-    //     this.equips.forEach(equip => {
-    //       if (obj[equip.cateId] === undefined) {
-    //         obj[equip.cateId] = [equip]
-    //       } else {
-    //         obj[equip.cateId] = [...obj[equip.cateId], equip]
-    //       }
-    //     })
-
-    //     return Object.keys(obj).map(id => {
-    //       return {
-    //         cateId: id,
-    //         cateName: obj[id][0].cateName,
-    //         equips: obj[id]
-    //       }
-    //     })
-    //   }
-    // }
   },
 
   components: {},
@@ -77,8 +61,26 @@ export default {
       })
     },
 
-    onConfirm(e) {
-      console.log('===onConfirm', e)
+    onDeleteEvent(equip) {
+      wx.showLoading({
+        title: '正在删除...'
+      })
+
+      const that = this
+      api.equip.deleteMyEquip(equip._id).then(res => {
+        that
+          .getMyEquips()
+          .then(res => {
+            wx.hideLoading()
+          })
+          .catch(err => {
+            console.log('===err', err)
+            wx.hideLoading()
+          })
+      })
+    },
+
+    onAddEvent(e) {
       const name = e.mp.detail.value
       const index = parseInt(e.mp.target.id)
       const cate = this.sections[index]
@@ -112,4 +114,10 @@ export default {
 </script>
 
 <style scoped>
+.cell-right {
+  width: 130rpx;
+  height: 100rpx;
+  text-align: center;
+  line-height: 100rpx;
+}
 </style>

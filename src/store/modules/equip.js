@@ -19,7 +19,7 @@ const actions = {
       })
     }
     const ids = [cateId, ...cateUtils.getBaseCateIds()]
-    return api.travel
+    return api.equip
       .getEquips(0, ids)
       .then(res => {
         wx.hideLoading()
@@ -35,7 +35,7 @@ const actions = {
     wx.showLoading({
       title: '数据更新中...'
     })
-    return api.travel
+    return api.equip
       .addEquips(0, equips)
       .then(res => {
         wx.hideLoading()
@@ -53,7 +53,7 @@ const actions = {
         title: '数据加载中...'
       })
     }
-    return api.travel
+    return api.equip
       .getEquips(1, [])
       .then(res => {
         wx.hideLoading()
@@ -69,7 +69,7 @@ const actions = {
     wx.showLoading({
       title: '数据更新中...'
     })
-    return api.travel
+    return api.equip
       .addEquips(1, equips)
       .then(res => {
         wx.hideLoading()

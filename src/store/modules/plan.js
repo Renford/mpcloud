@@ -29,7 +29,7 @@ const actions = {
       })
     }
 
-    return api.travel
+    return api.plan
       .getPlans([0, 1], 1)
       .then(res => {
         wx.hideLoading()
@@ -52,7 +52,7 @@ const actions = {
       })
     }
 
-    return api.travel
+    return api.plan
       .getPlanFromId(planId)
       .then(res => {
         wx.hideLoading()
@@ -74,13 +74,11 @@ const actions = {
         title: '数据加载中...'
       })
     }
-    return api.travel
+    return api.plan
       .getPlans([0, 1, 2], config.pageSize)
       .then(res => {
         wx.hideLoading()
-        if (res.length > 0) {
-          commit('setPlans', res)
-        }
+        commit('setPlans', res)
       })
       .catch(err => {
         wx.hideLoading()
