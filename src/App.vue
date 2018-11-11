@@ -20,9 +20,10 @@ export default {
       })
     }
 
-    console.log('=========ops', ops)
-    if (ops.query.planId !== undefined && ops.query.planId.length !== 0) {
-      appUtils.sharePlanId = ops.query.planId
+    console.log('=========app ops', ops)
+    if (ops.query.tempId !== undefined && ops.query.tempId.length !== 0) {
+      appUtils.shareTempId = ops.query.tempId
+      appUtils.shareUserName = ops.query.userName
     }
 
     appUtils.getOpenId()

@@ -3,12 +3,13 @@
 
     <div class="heaer-container">
       <wux-image :src="userInfo.avatarUrl" shape="circle" width=120rpx height=120rpx></wux-image>
-      <div class="header-name C1 F3">断红残雪</div>
+      <div class="header-name C1 F3">{{userInfo.nickName}}</div>
     </div>
 
     <wux-cell-group>
-      <wux-cell title="我的规划" is-link url="/pages/tab2/plans/main"></wux-cell>
+      <wux-cell title="我的活动" is-link url="/pages/tab2/plans/main"></wux-cell>
       <wux-cell title="我的装备" is-link url="/pages/tab2/equips/main"></wux-cell>
+      <wux-cell title="我的模板" is-link url="/pages/tab2/temps/main"></wux-cell>
     </wux-cell-group>
 
   </div>

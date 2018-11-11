@@ -6,7 +6,8 @@ class AppUtils {
   userInfo = {}
   bottomHeight = 48
 
-  sharePlanId = ''
+  shareTempId = ''
+  shareUserName = ''
 
   saveOpenId(openId) {
     this.openId = openId
@@ -24,11 +25,16 @@ class AppUtils {
     })
   }
 
-  isShowSharePlan() {
-    if (this.sharePlanId !== undefined && this.sharePlanId.length > 0) {
+  isShowShareTemp() {
+    if (this.shareTempId !== undefined && this.shareTempId.length > 0) {
       return true
     }
     return false
+  }
+
+  clearShareTemp() {
+    this.shareTempId = ''
+    this.shareUserName = ''
   }
 
   loadStorage() {

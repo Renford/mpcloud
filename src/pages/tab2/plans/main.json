@@ -1,10 +1,8 @@
 {
-  "navigationBarTitleText": "我的规划",
+  "navigationBarTitleText": "我的活动",
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
     "wux-prompt": "/static/wux/prompt/index",
-    "wux-wing-blank": "/static/wux/wing-blank/index",
-    "wux-card": "/static/wux/card/index",
     "van-swipe-cell": "/static/vant/swipe-cell/index"
   }
 }

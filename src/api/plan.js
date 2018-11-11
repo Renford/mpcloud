@@ -1,7 +1,7 @@
 import cloud from './cloud'
 import config from './config'
 
-// 规划相关操作
+// 活动相关操作
 class Plan {
   addPlan(plan) {
     const data = Object.assign(

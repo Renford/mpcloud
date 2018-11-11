@@ -72,7 +72,6 @@ export default {
         options: this.cateNames,
 
         onConfirm: (value, index, options) => {
-          console.log('===wux-select--onConfirm', value, index, options)
           if (index !== -1) {
             const cate = cateUtils.cates[index]
             that.equip.cateId = cate.cateId

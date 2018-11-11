@@ -9,11 +9,20 @@
         </wux-cell-group>
       </div>
     </div>
+
+    <div v-if="plan.status === 2">
+      <div class="bottom-fixed-container flex-row" :style="{height: bottomHeight+'px'}">
+        <button id="100" class="button-next C5" plain @click="onTempsEvent">保存为模板</button>
+      </div>
+    </div>
+    
   </div>
 </template>
 
 <script>
+import appUtils from '@/common/utils/AppUtils'
 import cateUtils from '@/common/utils/CateUtils'
+
 export default {
   data() {
     return {
@@ -22,6 +31,12 @@ export default {
   },
 
   computed: {
+    bottomHeight: {
+      get: function() {
+        return appUtils.bottomHeight
+      }
+    },
+
     sortCates: {
       get: function() {
         if (Object.keys(this.plan).length === 0) {
@@ -36,7 +51,20 @@ export default {
 
   components: {},
 
-  methods: {},
+  methods: {
+    onTempsEvent(e) {
+      const equips = this.plan.dones.map(equip => {
+        return equip.name
+      })
+      const equisStr = JSON.stringify(equips)
+      this.$router.push({
+        path: '/pages/tab2/tempadd/main',
+        query: {
+          equips: equisStr
+        }
+      })
+    }
+  },
 
   mounted() {
     this.plan = JSON.parse(this.$route.query.plan)
@@ -47,4 +75,10 @@ export default {
 </script>
 
 <style scoped>
+.button-next {
+  width: 100%;
+  height: 120rpx;
+  border: 0;
+  color: white;
+}
 </style>

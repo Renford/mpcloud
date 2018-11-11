@@ -17,7 +17,7 @@
     </wux-cell-group>
 
     <div class="bottom-button-container">
-      <wux-button block type="balanced" @click="onSubmitEvent">生成规划清单</wux-button>
+      <wux-button block type="balanced" @click="onSubmitEvent">生成活动清单</wux-button>
     </div>
     
   </div>
@@ -60,9 +60,11 @@ export default {
       if (this.planDate.length > 0) {
         values = [this.planDate]
       }
+      const minDate = new Date().getTime()
       const that = this
       $wuxCalendar().open({
         value: values,
+        minDate: minDate,
         onChange: (values, displayValues) => {
           that.planDate = displayValues[0]
         }
@@ -115,7 +117,7 @@ const isDataValid = that => {
   if (that.planTitle.length === 0) {
     $wuxToast().show({
       type: 'text',
-      text: '没有标题的规划不是一个好规划'
+      text: '没有标题的活动不是一个好活动'
     })
     result = false
   }

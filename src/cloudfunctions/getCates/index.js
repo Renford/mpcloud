@@ -21,6 +21,7 @@ exports.main = async (event, context) => {
         cateId: ids
       })
       .orderBy('cateType', 'asc')
+      .limit(1000)
       .get()
 
     return result.successResult(res)

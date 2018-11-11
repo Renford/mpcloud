@@ -8,7 +8,7 @@ const successResult = res => {
     result = formateResult(0, '', res._id)
   } else if (res.errMsg === 'document.set:ok') {
     result = formateResult(0, '', res.stats)
-  } else if (res.errMsg === 'collection.remove:ok') {
+  } else if (res.errMsg === 'document.remove:ok') {
     result = formateResult(0, '', res.stats)
   } else {
     result = formateResult(1, '=== data base operate error ===')

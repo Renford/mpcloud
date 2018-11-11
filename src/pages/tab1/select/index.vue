@@ -159,7 +159,7 @@ export default {
       this.getEquips(this.cateId)
     } else if (this.viewType === '5') {
       let that = this
-      this.getSharePlan(appUtils.sharePlanId).then(res => {
+      this.getSharePlan(appUtils.shareTempId).then(res => {
         updateSelectObject(that.sharePlan, that)
       })
     }

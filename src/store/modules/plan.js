@@ -2,9 +2,9 @@ import api from '@/api/api'
 import config from '@/api/config'
 
 const state = {
-  plan: {}, // 下一个未完成规划
+  plan: {}, // 下一个未完成活动
   sharePlan: {}, // 分享的plan
-  plans: [] // 所有规划
+  plans: [] // 所有活动
 }
 
 const mutations = {

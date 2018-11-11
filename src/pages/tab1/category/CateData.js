@@ -187,7 +187,7 @@ const cates = [
     cateId: 'qita',
     cateName: '其他',
     cateType: '3',
-    equips: ['钥匙', '钱包', '雨伞', '指南针', '急救包']
+    equips: ['钥匙', '钱包', '雨伞', '指南针', '急救包', '队旗', '行程单']
   }
 ]
 

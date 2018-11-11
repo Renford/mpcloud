@@ -7,7 +7,7 @@ cloud.init()
 const db = cloud.database()
 const _ = db.command
 
-// 请求规划数组，
+// 请求活动数组，
 exports.main = async (event, context) => {
   const count = event.count
   const ids = event.ids
@@ -44,6 +44,7 @@ const handleEquips = async names => {
     .where({
       name: _.in(names)
     })
+    .limit(1000)
     .get()
 
   return result.data

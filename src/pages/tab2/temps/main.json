@@ -1,6 +1,8 @@
 {
   "usingComponents": {
     "wux-button": "/static/wux/button/index",
-    "wux-prompt": "/static/wux/prompt/index"
+    "wux-toast": "/static/wux/toast/index",
+    "wux-prompt": "/static/wux/prompt/index",
+    "van-swipe-cell": "/static/vant/swipe-cell/index"
   }
 }

@@ -14,7 +14,7 @@
 
     <div v-else-if="viewStatus === 1">
       <div class="nodata-container">
-        <wux-prompt :visible="viewStatus === 1" title="暂无规划，点击添加" @click="onAddPlanEvent" />
+        <wux-prompt :visible="viewStatus === 1" title="暂无活动，点击添加" @click="onAddPlanEvent" />
       </div>
     </div>
 
@@ -24,7 +24,7 @@
         <home-header :plan="plan"></home-header>
       </div>
 
-      <wux-divider text="未装包"/>
+      <wux-divider :text="todoTitle"/>
       <div v-for="(cate, cateIndex) in cateTodos" :key="cateIndex">
         <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <wux-divider text="已装包"/>
+      <wux-divider :text="doneTitle"/>
       <div v-for="(cate, cateIndex) in cateDones" :key="cateIndex">
         <div v-if="cate.equips.length > 0">
           <wux-cell-group :title="cate.cateName">
@@ -81,7 +81,9 @@ export default {
   data() {
     return {
       viewStatus: -1, // -1、数据加载中，0、未登录，1、无数据，2、有数据
-      headUrl: '/static/icon_head.png'
+      headUrl: '/static/icon_head.png',
+      todoTitle: '未装包',
+      doneTitle: '已装包'
     }
   },
 
@@ -91,12 +93,22 @@ export default {
 
     cateTodos: {
       get: function() {
+        if (Object.keys(this.plan).length === 0) {
+          return []
+        }
+        const total = this.plan.todos.length + this.plan.dones.length
+        this.todoTitle = `未装包(${this.plan.todos.length}/${total})`
         return cateUtils.getSortCatesFromEquips(this.plan.todos)
       }
     },
 
     cateDones: {
       get: function() {
+        if (Object.keys(this.plan).length === 0) {
+          return []
+        }
+        const total = this.plan.todos.length + this.plan.dones.length
+        this.doneTitle = `已装包(${this.plan.dones.length}/${total})`
         return cateUtils.getSortCatesFromEquips(this.plan.dones)
       }
     },
@@ -189,13 +201,18 @@ export default {
     }
   },
 
+  mounted() {
+    showImportShareData(this)
+  },
+
   onShareAppMessage(e) {
-    let path = ''
-    if (e.from === 'button') {
-      path = `/pages/tab1/home/main?planId=${this.plan._id}`
-    } else {
-      path = `/pages/tab1/home/main`
-    }
+    // let path = ''
+    // if (e.from === 'button') {
+    //   path = `/pages/tab1/home/main?planId=${this.plan._id}`
+    // } else {
+    //   path = `/pages/tab1/home/main`
+    // }
+    const path = '/pages/tab1/home/main'
     return {
       title: '打包小助手',
       path: path,
@@ -217,7 +234,6 @@ function getCurrentPlan(that) {
         .getCurrentPlan()
         .then(res => {
           updateViewStatus(that)
-          showImportShareData(that)
         })
         .catch(err => {
           console.log('err====', err)
@@ -251,14 +267,16 @@ function updateViewStatus(that) {
 }
 
 function showImportShareData(that) {
-  if (appUtils.isShowSharePlan() && Object.keys(that.plan).length === 0) {
+  if (appUtils.isShowShareTemp()) {
     that.$router.push({
-      path: '/pages/tab1/select/main',
+      path: '/pages/tab2/tempdetail/main',
       query: {
-        type: '5',
-        planId: appUtils.sharePlanId
+        type: 1,
+        tempId: appUtils.shareTempId,
+        fromUserName: appUtils.shareUserName
       }
     })
+    appUtils.clearShareTemp()
   }
 }
 </script>
