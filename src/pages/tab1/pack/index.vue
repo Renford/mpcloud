@@ -142,8 +142,13 @@ const todos2dones = (obj, type, that) => {
     .concat(selects)
 
   if (type === 1) {
-    plan.status = 1
-    plan.statusName = '进行中'
+    if (todos.length === 0) {
+      plan.status = 2
+      plan.statusName = '已完成'
+    } else {
+      plan.status = 1
+      plan.statusName = '进行中'
+    }
     plan.todos = todos
     plan.dones = dones
   } else if (type === 2) {

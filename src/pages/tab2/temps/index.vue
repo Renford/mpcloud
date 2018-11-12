@@ -9,7 +9,7 @@
             <div class="C1 F3">{{temp.title}}</div>
             <div class="cell-content C3 F5">{{temp.desp}}</div>
           </div>
-          <wux-button size="small" type="balanced" @click="onItemUseEvent(temp)">立即使用</wux-button>
+          <wux-button size="small" type="balanced" @click.stop="onItemUseEvent(temp)">立即使用</wux-button>
         </div>
         <div slot="right" class="cell-right B0 F4 C5" @click="onItemDelEvent(temp)">删除</div>
       </van-swipe-cell>

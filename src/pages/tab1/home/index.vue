@@ -206,17 +206,11 @@ export default {
   },
 
   onShareAppMessage(e) {
-    // let path = ''
-    // if (e.from === 'button') {
-    //   path = `/pages/tab1/home/main?planId=${this.plan._id}`
-    // } else {
-    //   path = `/pages/tab1/home/main`
-    // }
     const path = '/pages/tab1/home/main'
     return {
-      title: '打包小助手',
+      title: '提前计划，逐条打包，从此杜绝‘忘带XX了’...',
       path: path,
-      imageUrl: '/static/icon'
+      imageUrl: '/static/img_share.png'
     }
   }
 }

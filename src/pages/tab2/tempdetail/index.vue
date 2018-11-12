@@ -132,9 +132,11 @@ export default {
       appUtils.userInfo.nickName
     }`
     return {
-      title: '打包小助手',
+      title: `$${appUtils.userInfo.nickName}$大神与你共享他的装备模板《${
+        this.temp.title
+      }》，可留为己用哦！`,
       path: path,
-      imageUrl: '/static/icon'
+      imageUrl: '/static/img_share.png'
     }
   }
 }

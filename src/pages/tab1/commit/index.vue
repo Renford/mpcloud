@@ -17,7 +17,7 @@
     </wux-cell-group>
 
     <div class="bottom-button-container">
-      <wux-button block type="balanced" @click="onSubmitEvent">生成活动清单</wux-button>
+      <wux-button block type="balanced" @click="onSubmitEvent">创建活动</wux-button>
     </div>
     
   </div>
